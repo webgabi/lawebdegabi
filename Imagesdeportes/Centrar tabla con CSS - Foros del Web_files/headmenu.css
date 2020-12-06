@@ -1,0 +1,13 @@
+.headmenu div, .headmenu h3, .headmenu a, .headmenu img, .headmenu form, .headmenu label, .headmenu p, .headmenu ul, .headmenu li,
+.content div, .content h3, .content a, .content p, .content ul, .content li, .content span, .content a,
+.tooltip div, .tooltip p, .tooltip span, .tooltip a, .tooltip label,
+#content_head h1, #content_head div, #content_head h1, #content_head img, #content_head form, #content_head ul,
+#content_head input, #content_head span, #content_head img, #content_head p, #content_head li, #content_head a,
+#content_footer h1, #content_footer div, #content_footer h1, #content_footer img, #content_footer form, #content_footer ul,
+#content_footer input, #content_footer span, #content_footer img, #content_footer p, #content_footer li
+{margin:0;padding:0;outline:0;font-size:100%;vertical-align:baseline;list-style-type:none}
+
+.content, .tooltip, .headmenu, #content_head, #content_footer, #vbseo { font-family: Helvetica, arial, sans-serif; color:#333; font-size:12px; text-align: center; }
+.tooltip { text-align: left; }
+
+.content { width: 990px; margin: 0 auto; text-align: left; padding: 20px 0; }

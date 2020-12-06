@@ -1,0 +1,287 @@
+*{
+	font-family: verdana;
+	font-size: 17px;
+}
+
+table {
+	border: 3px solid #ccc;
+	width: 100%;
+	margin: 0px;
+	padding: 5px;
+	margin-top: 20px;
+	border-collapse: collapse;
+	border-spacing: 0px;
+}
+
+table tr {
+	border: 1px solid #ddd;
+	padding: 3px;
+}
+
+table tr:nth-child(even) {
+	background-color: #666;
+	color: white;
+}
+
+.titulof1{
+	background-color: #fff;
+	color: black;	
+	background: #fff;
+}
+
+
+
+table td, table th {
+	padding: 3px;
+	text-align: center;
+}
+
+table th {
+	text-transform: uppercase;
+	font-family: 18px;
+	letter-spacing: 1px;
+}
+
+
+.textog {
+	font-size: 2em;
+	margin: 0px;
+	padding: 0px;
+	border-radius: 3px;
+/*	background: #999;*/
+}
+
+#Div1{
+	text-align: center;
+	font-size: 1.8em;
+	margin: 20px;
+	padding-bottom: 10px;
+}
+
+#Div2 a{
+	
+	font-size: 1.4em;
+	cursor: pointer;
+		background-color: rgba(181, 48, 48, 0.97);
+		background-image: -moz-linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.3)), url("images/bg01.png");
+		background-image: -webkit-linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.3)), url("images/bg01.png");
+		background-image: -ms-linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.3)), url("images/bg01.png");
+		background-image: -o-linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.3)), url("images/bg01.png");
+		background-image: linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.3)), url("images/bg01.png");
+		padding: 16px ;
+	margin: 0px;
+	margin-top: 0px;
+	padding: 5px;
+	color: #fffefe;
+	
+}
+
+#Div2 a:hover{
+			background-color: rgba(124, 127, 128, 0.97);
+}
+
+
+#Div2 a:hover {
+	color: #000;
+}
+
+
+#Div3 p{
+margin: 5px;
+    margin-top: 80px;
+   
+		font-size: 1.8em;
+	cursor:default;
+		background-color: rgba(124, 127, 128, 0.97);
+		background-image: -moz-linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.3)), url("images/bg01.png");
+		background-image: -webkit-linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.3)), url("images/bg01.png");
+		background-image: -ms-linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.3)), url("images/bg01.png");
+		background-image: -o-linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.3)), url("images/bg01.png");
+		background-image: linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.3)), url("images/bg01.png");
+		padding: 16px;
+		color: black;
+} 
+
+
+#Div4 a{
+
+		font-size: 1.8em;
+	cursor: pointer;
+		background-color: rgba(181, 48, 48, 0.97);
+		background-image: -moz-linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.3)), url("images/bg01.png");
+		background-image: -webkit-linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.3)), url("images/bg01.png");
+		background-image: -ms-linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.3)), url("images/bg01.png");
+		background-image: -o-linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.3)), url("images/bg01.png");
+		background-image: linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.3)), url("images/bg01.png");
+		padding: 16px ;
+				
+}
+
+#Div4 a:hover{
+			background-color: rgba(124, 127, 128, 0.97);
+}
+
+#Div4 a {
+    
+	font-size: 1.8em;
+	margin: 0px;
+	text-align: center;
+	color: #fffefe;
+
+}
+
+#Div4 a:hover {
+	color: #000;
+}
+
+section {
+	width: 100%;
+	margin-bottom: 40px;
+}
+
+.izq {
+	text-align: left;
+	margin: 0px;
+	padding: 0px;
+}
+
+.der {
+	text-align: right;
+	
+}
+
+/*//////////////////////////////////////////////*/
+@media (min-width: 100px) and (max-width: 320px){
+	#Div1{
+	font-size: 1.8em;
+	margin: 0px;
+	padding-bottom: 0px;
+	}
+	
+	
+	    
+	
+/*
+	header img:hover{
+	cursor: pointer;
+	transform: scale(4);
+	-moz-transform: scale(4);	
+	-webkit-transform: scale(4);	
+	-ms-transform: scale(4);	
+	-o-transform: scale(4);	
+		
+		
+}
+*/
+	
+	
+
+}
+/*Pantalla del movil*/
+@media (min-width: 320px) and (max-width: 479px){
+	#Div1{
+	font-size: 1.9em;
+	margin: 20px;
+	padding-bottom: 15px;
+	}	
+	
+	#Div2{
+	text-align: center;
+	font-size: 1.2em;
+	margin: 0px;
+	padding-bottom: 0px;
+	}
+	
+	    
+	
+
+	
+}
+
+@media (min-width: 576px) and (max-width: 767.99px){
+	
+	    
+	#Div2{
+	text-align: center;
+	font-size: 1.2em;
+	margin: 0px;
+	padding-bottom: 0px;
+	}
+	
+/*
+	header img:hover{
+	cursor: pointer;
+	transform: scale(5);
+	-moz-transform: scale(5);	
+	-webkit-transform: scale(5);	
+	-ms-transform: scale(5);	
+	-o-transform: scale(5);	
+}
+*/
+	
+	
+	
+}
+
+@media (min-width: 992px) and (max-width: 1199.99px){
+		
+	#Div2{
+	text-align: center;
+	font-size: 1.2em;
+	margin: 0px;
+	padding-bottom: 0px;
+	}
+	
+	
+	
+	    
+/*
+	header img:hover{
+	cursor: pointer;
+	transform: scale(5);
+	-moz-transform: scale(5);	
+	-webkit-transform: scale(5);	
+	-ms-transform: scale(5);	
+	-o-transform: scale(5);
+}
+	
+*/
+	
+}
+/*Pantalla principal Asus*/
+@media (min-width: 1200px) and (max-width: 1280px){
+	
+	
+	#Div2{
+	text-align: center;
+	font-size: 1.2em;
+	margin: 0px;
+	padding-bottom: 0px;
+	}
+	
+	
+	
+	    
+	
+}
+@media (min-width: 1300px) and (max-width: 1679.99px){
+	
+	
+	#Div2{
+	text-align: center;
+	font-size: 1.2em;
+	margin: 0px;
+	padding-bottom: 0px;
+	}
+	
+	
+	
+
+}
+
+@media (min-width: 1680px) and (max-width: 1919.99px){
+	    
+	
+}
+
+

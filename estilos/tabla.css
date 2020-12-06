@@ -1,0 +1,9 @@
+table tr:hover {
+	background:#37c0fb}	/*Te hace un marcador en todas las filas de color gris*/
+	
+	table td:hover {
+	background: white;
+	/*background: #37c0fb;*/ /*Te hace un marcador en  una sola columna de color azul  #024959 Este en verde*/
+	color: #474747;/*Color amarillo*/
+	font-size: auto;
+}	/*Y un color en blanco de fuente*/
