@@ -19,7 +19,15 @@ header img:hover {
 
 
 
+.tabla-scroll td.ganador {
+	    background: #f80046;
+		color: white;
+}
 
+.tabla-scroll td.RET {
+	    background: black;
+		color: white;
+}
 
 /* TABLA CON SCROLL HORIZONTAL Y LÍNEAS */
 .tabla-scroll {
