@@ -1,0 +1,328 @@
+*{
+	margin:0;
+	padding:0;	
+}
+
+body {
+	background:#FFFFFA;
+}
+
+.contenido {
+	width:100%;
+	margin:20px auto;
+	text-align:justify;
+}
+
+.contenido p {
+	margin-bottom: 1.25em;
+	font-size: 1.25em;
+	color: #484242;
+}	
+
+.ir-arriba {
+	display:none;
+	padding:20px;
+	/*background:#024959;*/
+	background: white;
+	
+	font-size:20px;
+	color:#fff;
+	cursor:pointer;
+	position: fixed;
+	bottom:20px;
+	right:20px;
+	z-index: 2;/*Para que quede el boton arriba pones z-index: 2; y 1 para quede debajo*/
+}
+
+.ir-arriba:hover{
+	background: rgb(211, 208, 208);
+
+}
+
+@font-face {
+  font-family: 'icomoon';
+  src:  url('fonts/icomoon.eot?4ydlu0');
+  src:  url('fonts/icomoon.eot?4ydlu0#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?4ydlu0') format('truetype'),
+    url('fonts/icomoon.woff?4ydlu0') format('woff'),
+    url('fonts/icomoon.svg?4ydlu0#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  
+	
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-arrow-up2:before {
+  content: "\ea3a";
+}
+
+	.calendario{					
+		border-style:solid;/*Te hace un cuadro alrededor del texto*/				
+		border-radius: 10px; /*Te pone el cuadro redondeado 10px*/				
+		border-width: 1px; /*Te hacer el grosor del cuadro con 1 px*/				
+		border-color: black; /*Te pone el borde del cuadro en rojo*/				
+		margin-bottom: 40px; /*Te pone el marco separado de abajo 40px*/				
+		margin-left: 10px;				
+		margin-right: 10px;				
+		padding: 20px 20px 20px 20px; /*Separa el texto del encabezado*/				
+		color: #474747;				
+		font-size: 20px; /*Te pone un tamaño de pixeles*/				
+		text-align:justify; /*Te justifica el texto*/				
+		/*text.aling: center;*//*Te centra el texto*/				
+		column-count: 1; /*Sirve para poner el texto en columna Por defecto seria 2*/				
+		-webkit-column-count: 1; /*Sirve para poner el texto en columna Por defecto seria 2*/				
+		text-align:justify;				
+		line-height:25px;/*Para separar las lineas y no quede el texto tan cerca*/				
+	} 					
+						
+						
+	.carrerarealizada{					
+		background-image: url(../../images/carrerapasada.jpg);				
+		background-repeat: no-repeat;				
+		background-color: #CCC;				
+		background-position:right;				
+		font-size: 1.25em;				
+						
+		}				
+						
+.historia {						
+		margin:auto;				
+		width:auto;				
+		height:auto;				
+		border: 1 px solid black;				
+		border: 1;				
+		display:none;				
+		}				
+						
+						
+						
+	.historia td{					
+	border:1 px solid # 000;/*Crea un borde interior en negro*/					
+	padding: 0.1px;					
+	text-align:left;					
+		}				
+						
+	.historia tr{					
+		width: 1px;				
+		height:1px;				
+		border: 1 px solid black;				
+		color: black;				
+		background-color: white;				
+		padding: 1px;				
+		text-align:center;				
+			}			
+
+	div#InicioAncho{		
+		position: relative;	
+		width: 100%;	
+		display: none;	
+		border:1px solid transparent;	
+	}		
+			
+	div#InicioAncho #slider {		
+		border-radius: 10px;	
+		border: 2px solid # 000;	
+		margin: 0 auto;	
+		margin-top: 5px;	
+		margin-bottom: 50px;	
+		min-height: 330px;	
+		overflow: hidden;	
+		padding: 0;	
+		position: relative;	
+		width: 95%;	
+	}		
+	div#InicioAncho #slider div.elemento {		
+		left:0;	
+		position:absolute;	
+		top:0;	
+		width: 100%;	
+	}		
+	div#InicioAncho #slider img {		
+		border:0;	
+		margin:0;	
+		padding:0;	
+		width: 100%;	
+	}		
+	div#InicioAncho #slider a{		
+		text-decoration: none;	
+	}		
+	div#InicioAncho #slider p.gancho {		
+		color: #DF7401;	
+		display: block;	
+		font-size: 1.4em;	
+		font-weight: bolder;	
+		line-height: 25px;	
+		position: absolute;	
+		right: 1%;	
+		text-shadow: 2px 2px 3px white, -2px -2px 3px white;	
+		top: 5%;	
+		width: 29%;	
+	}		
+			
+			
+			
+	.letrapc {		
+		font-family: "Microsoft Sans Serif", "Times New Roman", Algerian;	
+		font-size: 16px;	
+		border-top-width: 1px;	
+		border-right-width: 1px;	
+		border-bottom-width: 1px;	
+		border-left-width: 1px;	
+		border-top-style: none;	
+		border-right-style: none;	
+		border-bottom-style: none;	
+		border-left-style: none;	
+		clip: rect(auto,auto,auto,auto);	
+		text-align: left;	
+	}		
+
+	.clasificacion {					
+			width:100%;			
+			height: auto;			
+			border: 1 px solid black;			
+			display:none;			
+			}			
+						
+						
+		.clasificacion td{				
+			width: auto;			
+			height:auto;			
+			border: 1 px solid black;			
+			color: black;			
+			padding: 5px;			
+						
+			}			
+						
+						
+	.clasificacionsmarphones {					
+			margin:auto;			
+			width:auto;			
+			height:auto;			
+			border: 1 px solid black;			
+			border: 1;			
+			display:none;			
+			}			
+						
+						
+						
+		.clasificacionsmarphones td{				
+		border:1 px solid # 000;/*Crea un borde interior en negro*/				
+		padding: 0.1px;				
+		text-align:left;				
+			}			
+						
+						
+						
+						
+						
+						
+						
+		.español {				
+						
+		background-image: url(../../images/espanya.jpg);				
+	/*	background-image: url(../../images/carrerapasada.jpg);*/				
+			background-repeat: no-repeat;			
+	/*		background-color: #CCC;*/			
+			background-position:right;			
+			font-size: 1.00em;			
+	}					
+						
+						
+						
+						
+						
+						
+					
+						
+						
+	header img{					
+		width: 50px;				
+		height: 50px;				
+		transition-duration:0.5s;				
+		-webkit-transition-duration:0.5s;				
+		-moz-transition-duration: 0.5s;				
+		-ms-transition-duration: 0.5s;				
+		-o-transition-duration: 0.5s;				
+	}					
+						
+	header img:hover{					
+		cursor: pointer;				
+		transform: scale(5);				
+		-webkit-transform: scale(5);				
+		-moz-transform: scale(5);				
+		-ms-transform: scale(5);				
+		-o-transform: scale(5);				
+	}					
+						
+						
+						
+						
+		.formula1ymotogp{				
+						
+		column-count: 2; /*Sirve para poner el texto en columna Por defecto seria 2*/				
+		-webkit-column-count: 2; /*Sirve para poner el texto en columna Por defecto seria 2*/				
+		-webkit-column-rule:0.5px dotted red;				
+		text-align:center;				
+		line-height:20px;/*20px*/				
+						
+			}			
+						
+			.moto{			
+			column-count: 2; /*Sirve para poner el texto en columna Por defecto seria 2*/			
+			-webkit-column-count: 2; /*Sirve para poner el texto en columna Por defecto seria 2*/			
+			-webkit-column-rule: 0.5px dotted red;			
+			text-align: center;			
+			line-height: 15px;/*20px*/			
+			color: #999;			
+			padding-top:10px;			
+			padding:10px;			
+						
+						
+						
+			}			
+						
+						
+						
+						
+						
+		.titulo {				
+		text-align: center;				
+		margin-top: 0px;				
+		margin-right: auto;				
+		margin-bottom: 200px;
+		font-size: 2em;
+		margin-left: auto;				
+	}					
+
+
+@media (min-width: 320px) and (max-width: 479px){
+	
+	header img:hover {
+	margin-right: 105px;
+	}	
+	.Eliga-any {
+	margin: 20px;
+	}
+	
+	#jumpMenu{
+	width: 95%;
+	margin: 20px;	
+	}
+	
+
+	
+}

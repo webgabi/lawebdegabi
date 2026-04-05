@@ -1,0 +1,186 @@
+*{
+	font-family: verdana;
+	font-size: 17px;
+}
+
+table {
+	
+	border: 3px solid #ccc;
+	width: 100%;
+	margin: 0px;
+	padding: 5px;
+	margin-top: 0px;
+	border-collapse: collapse;
+	border-spacing: 0px;
+	font-size: 13px;
+	
+}
+
+table tr {
+	border: 1px solid #ddd;
+	padding: 3px;
+}
+
+table tr:nth-child(even) {
+	background-color: #c0bbbb;
+	color: rgb(3, 3, 3);
+}
+
+.titulof1{
+	background-color: #fff;
+	color: black;	
+	background: #fff;
+	font-family: 'Times New Roman', Times, serif;
+}
+
+
+
+table td, table th {
+	color: rgb(0, 0, 0);
+	padding: 3px;
+	text-align: center;
+}
+
+table th {
+	text-transform: uppercase;
+	font-family: 18px;
+	letter-spacing: 1px;
+}
+
+
+/*
+.table_responsive td th{
+	color: rgb(146, 63, 63);
+	font-size: 14px;
+}*/
+
+
+
+
+
+
+
+
+
+
+.table_movil td{
+	color: black;
+	font-size: 14px;
+}
+
+
+.textog {
+	font-size: 2em;
+	margin: 0px;
+	padding: 0px;
+	border-radius: 3px;
+/*	background: #999;*/
+}
+
+#Div1{
+	text-align: center;
+	font-size: 1.8em;
+	margin: 20px;
+	padding-bottom: 10px;
+}
+
+#Div2 a{
+	
+	font-size: 1.4em;
+	cursor: pointer;
+		background-color: rgba(181, 48, 48, 0.97);
+		background-image: -moz-linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.3)), url("images/bg01.png");
+		background-image: -webkit-linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.3)), url("images/bg01.png");
+		background-image: -ms-linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.3)), url("images/bg01.png");
+		background-image: -o-linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.3)), url("images/bg01.png");
+		background-image: linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.3)), url("images/bg01.png");
+		padding: 16px ;
+	margin: 0px;
+	margin-top: 0px;
+	padding: 5px;
+	color: #fffefe;
+	
+}
+
+#Div2 a:hover{
+			background-color: rgba(124, 127, 128, 0.97);
+}
+
+
+#Div2 a:hover {
+	color: #000;
+}
+
+
+#Div3 p{
+margin: 5px;
+    margin-top: 30px;
+	margin-bottom: 40px;
+   
+		font-size: 1.8em;
+	cursor:default;
+		background-color: rgba(124, 127, 128, 0.97);
+		background-image: -moz-linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.3)), url("images/bg01.png");
+		background-image: -webkit-linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.3)), url("images/bg01.png");
+		background-image: -ms-linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.3)), url("images/bg01.png");
+		background-image: -o-linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.3)), url("images/bg01.png");
+		background-image: linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.3)), url("images/bg01.png");
+		padding: 16px;
+		color: black;
+} 
+
+
+#Div4 a{
+
+		font-size: 1.8em;
+	cursor: pointer;
+		background-color: rgba(181, 48, 48, 0.97);
+		background-image: -moz-linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.3)), url("images/bg01.png");
+		background-image: -webkit-linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.3)), url("images/bg01.png");
+		background-image: -ms-linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.3)), url("images/bg01.png");
+		background-image: -o-linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.3)), url("images/bg01.png");
+		background-image: linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.3)), url("images/bg01.png");
+		padding: 16px ;
+		border-radius: 8px;
+				
+}
+
+#Div4 a:hover{
+			background-color: rgba(124, 127, 128, 0.97);
+}
+
+#Div4 a {
+    
+	font-size: 1.8em;
+	margin: 0px;
+	padding-top: 10px;
+	text-align: center;
+	color: #fffefe;
+
+}
+
+#Div4 a:hover {
+	color: #000;
+}
+
+section {
+	width: 100%;
+	margin-bottom: 40px;
+}
+
+.izq {
+	text-align: left;
+	margin: 0px;
+	padding: 0px;
+}
+
+.der {
+	text-align: right;
+	
+}
+
+
+
+/*//////////////////////////////////////////////*/
+
+/*480 Ã— 800, 640 Ã— 1136, 720 Ã— 1280, 750 Ã— 1334, 1080 Ã— 1920 y 1440 Ã— 2560.* Medidas de moviles*/

@@ -1,0 +1,265 @@
+/* Reset general */
+*{
+	margin:0;
+	padding:0;	
+}
+
+body {
+	background:#FFFFFA;
+}
+
+/* HEADER e imagen interactiva */
+header{
+	position: relative;
+	z-index: 1000;
+	overflow: visible; /* permite que la imagen sobresalga */
+}
+
+header img{
+	width: 50px;
+	height: 50px;
+	transition: transform 0.3s ease, box-shadow 0.3s ease;
+	position: relative;
+	z-index: 4;
+}
+
+header img:hover{
+	cursor: pointer;
+	transform: scale(3) translateY(-20px); /* sube un poco */
+	z-index: 9999; /* por encima de la tabla */
+	box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+}
+
+/* CONTENIDO GENERAL */
+.contenido {
+	width:100%;
+	margin:20px auto;
+	text-align:justify;
+}
+
+.contenido p {
+	margin-bottom: 1.25em;
+	font-size: 1.25em;
+	color: #484242;
+}	
+
+.ir-arriba {
+	display:none;
+	padding:20px;
+	background: white;
+	font-size:20px;
+	color:#fff;
+	cursor:pointer;
+	position: fixed;
+	bottom:20px;
+	right:20px;
+	z-index: 5000; /* encima de la tabla, debajo del header */
+}
+
+.ir-arriba:hover{
+	background: rgb(211, 208, 208);
+}
+
+/* CALENDARIO */
+.calendario{					
+	border:1px solid black;			
+	border-radius: 10px;				
+	margin-bottom: 40px; 				
+	margin-left: 10px;				
+	margin-right: 10px;				
+	padding: 20px;				
+	color: #474747;				
+	font-size: 20px;				
+	text-align:justify;				
+	column-count: 1; 				
+	-webkit-column-count: 1; 				
+	line-height:25px;			
+}
+
+/* CARRERA REALIZADA */
+.carrerarealizada{					
+	background-image: url(../../images/carrerapasada.jpg);				
+	background-repeat: no-repeat;				
+	background-color: #CCC;				
+	background-position:right;				
+	font-size: 1.25em;				
+}
+
+/* HISTORIA */
+.historia {						
+	margin:auto;				
+	width:auto;				
+	height:auto;				
+	border: 1px solid black;				
+	display:none;				
+}
+
+.historia td{					
+	border:1px solid #000;					
+	padding: 0.1px;					
+	text-align:left;					
+}				
+
+.historia tr{					
+	width: auto;				
+	height:auto;				
+	border: 1px solid black;				
+	color: black;				
+	background-color: white;				
+	padding: 1px;				
+	text-align:center;				
+}				
+
+/* SLIDER */
+div#InicioAncho{		
+	position: relative;	
+	width: 100%;	
+	display: none;	
+	border:1px solid transparent;	
+}		
+
+div#InicioAncho #slider {		
+	border-radius: 10px;	
+	border: 2px solid #000;	
+	margin: 0 auto;	
+	margin-top: 5px;	
+	margin-bottom: 50px;	
+	min-height: 330px;	
+	overflow: hidden;	
+	padding: 0;	
+	position: relative;	
+	width: 95%;	
+}		
+
+div#InicioAncho #slider div.elemento {		
+	left:0;	
+	position:absolute;	
+	top:0;	
+	width: 100%;	
+}		
+
+div#InicioAncho #slider img {		
+	border:0;	
+	margin:0;	
+	padding:0;	
+	width: 100%;	
+}		
+
+div#InicioAncho #slider a{		
+	text-decoration: none;	
+}		
+
+div#InicioAncho #slider p.gancho {		
+	color: #DF7401;	
+	display: block;	
+	font-size: 1.4em;	
+	font-weight: bolder;	
+	line-height: 25px;	
+	position: absolute;	
+	right: 1%;	
+	text-shadow: 2px 2px 3px white, -2px -2px 3px white;	
+	top: 5%;	
+	width: 29%;	
+}		
+
+/* TEXTO VARIOS ESTILOS */
+.letrapc {		
+	font-family: "Microsoft Sans Serif", "Times New Roman", Algerian;	
+	font-size: 16px;	
+	border: none;	
+	text-align: left;	
+}		
+
+.formula1ymotogp{				
+	column-count: 2; 				
+	-webkit-column-count: 2; 				
+	-webkit-column-rule:0.5px dotted red;				
+	text-align:center;				
+	line-height:20px;				
+}			
+
+.moto{			
+	column-count: 2;			
+	-webkit-column-count: 2;			
+	-webkit-column-rule: 0.5px dotted red;			
+	text-align: center;			
+	line-height: 15px;			
+	color: #999;			
+	padding-top:10px;			
+	padding:10px;			
+}			
+
+.titulo {				
+	text-align: center;				
+	margin-top: 0px;				
+	margin-bottom: 200px;
+	font-size: 2em;
+}					
+
+.español {				
+	background-image: url(../../images/espanya.jpg);				
+	background-repeat: no-repeat;				
+	background-position:right;			
+	font-size: 1.00em;			
+}					
+
+/* TABLA CON SCROLL HORIZONTAL Y LÍNEAS */
+.tabla-scroll {
+	overflow-x: auto; 
+	overflow-y: visible; /* importante: permite que la imagen sobresalga */
+	width: 100%;
+}
+
+table {
+	border-collapse: collapse; /* líneas continuas */
+	width: 100%;
+}
+
+td, th {
+	border: 1px solid #ccc; /* todas las celdas con líneas */
+	padding: 4px 6px;       /* tabla compacta */
+	text-align: center;
+}
+
+tr:nth-child(even){
+	background-color: #f2f2f2; 
+}
+
+/* Columnas de carreras con ancho mínimo */
+td:nth-child(n+6), th:nth-child(n+6){
+	min-width: 30px; 
+}
+
+/* Sticky de las primeras columnas (Pos, Piloto, Imagen, Equipo, Pts) */
+td:nth-child(1), th:nth-child(1){ position: sticky; left: 0; background: white; z-index: 3; border: 1px solid #ccc; }
+td:nth-child(2), th:nth-child(2){ position: sticky; left: 24px; background: white; z-index: 3; border: 1px solid #ccc; }
+td:nth-child(3), th:nth-child(3){ position: sticky; left: 92px; background: white; z-index: 3; border: 1px solid #ccc; }
+td:nth-child(4), th:nth-child(4){ position: sticky; left: 142px; background: white; z-index: 3; border: 1px solid #ccc; }
+td:nth-child(5), th:nth-child(5){ position: sticky; left: 198px; background: white; z-index: 3; border: 1px solid #ccc; }
+
+/* MEDIA QUERY */
+@media (min-width: 320px) and (max-width: 479px){
+	header img:hover {
+		margin-right: 105px;
+	}	
+
+	.Eliga-any {
+		margin: 20px;
+	}
+	
+	#jumpMenu{
+		width: 95%;
+		margin: 20px;	
+	}
+}
+
+/* Ajuste imágenes dentro de la tabla */
+td img {
+	width: 30px;
+	height: auto;
+}
+
+/* Corrección de otros bordes */
+.historia, .clasificacion, .clasificacionsmarphones, .letrapc {
+	border: 1px solid #000;
+}

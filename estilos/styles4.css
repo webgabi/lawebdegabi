@@ -1,0 +1,386 @@
+*{
+	font-family: verdana;
+	font-size: 17px;
+}
+
+/*
+table {
+    display: block;
+	
+   overflow-x: auto;
+    white-space: nowrap;
+}
+
+table tbody {
+    display: table;
+    width: 100%;
+}
+*/
+
+/*
+.table_responsive {
+	flex: 1 1 auto;
+	padding: 1rem 1rem;
+}
+*/
+
+
+table {
+	border: 1px solid #ccc;
+	width: 100%;
+	margin-left: auto;
+  margin-right: auto;
+	padding: 0;
+	border-collapse: collapse;
+	border-spacing: 1 px;
+	font-size: 13px;
+}
+
+table tr {
+	/*border: 1px solid #ddd;
+	/*padding: 5px;*/
+}
+
+table tr:nth-child(even) {
+	/*background-color: #999;
+	color: white;*/
+}
+
+table td, table th {
+	padding: 3px;
+	text-align: center;
+	border: 1px solid #ddd;
+}
+
+table th {
+	text-transform: uppercase;
+	font-family: 15px;
+	letter-spacing: 1px;
+	border: 1px solid #ddd;
+}
+
+
+
+.titulof1{
+	background-color: #fff;
+	color: black;	
+	background: #fff;
+}
+
+
+
+
+.textog {
+	font-size: 2em;
+	margin: 0px;
+	padding: 0px;
+	border-radius: 3px;
+/*	background: #999;*/
+}
+
+#Div1{
+	text-align: center;
+	font-size: 1.8em;
+	margin: 20px;
+	padding-bottom: 10px;
+}
+
+#Div2 a{
+	
+	font-size: 1.4em;
+	cursor: pointer;
+		background-color: rgba(181, 48, 48, 0.97);
+		background-image: -moz-linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.3)), url("images/bg01.png");
+		background-image: -webkit-linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.3)), url("images/bg01.png");
+		background-image: -ms-linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.3)), url("images/bg01.png");
+		background-image: -o-linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.3)), url("images/bg01.png");
+		background-image: linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.3)), url("images/bg01.png");
+		padding: 16px ;
+	margin: 0px;
+	margin-top: 0px;
+	padding: 5px;
+	color: #fffefe;
+	
+}
+
+#Div2 a:hover{
+			background-color: rgba(124, 127, 128, 0.97);
+}
+
+
+#Div2 a:hover {
+	color: #000;
+}
+
+
+#Div3 p{
+margin: 5px;
+    margin-top: 80px;
+   
+		font-size: 1.8em;
+	cursor:default;
+		background-color: rgba(124, 127, 128, 0.97);
+		background-image: -moz-linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.3)), url("images/bg01.png");
+		background-image: -webkit-linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.3)), url("images/bg01.png");
+		background-image: -ms-linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.3)), url("images/bg01.png");
+		background-image: -o-linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.3)), url("images/bg01.png");
+		background-image: linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.3)), url("images/bg01.png");
+		padding: 16px;
+		color: black;
+} 
+
+
+#Div4 a{
+
+		font-size: 1.8em;
+	cursor: pointer;
+		background-color: rgba(181, 48, 48, 0.97);
+		background-image: -moz-linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.3)), url("images/bg01.png");
+		background-image: -webkit-linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.3)), url("images/bg01.png");
+		background-image: -ms-linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.3)), url("images/bg01.png");
+		background-image: -o-linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.3)), url("images/bg01.png");
+		background-image: linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.3)), url("images/bg01.png");
+		padding: 16px ;
+				
+}
+
+#Div4 a:hover{
+			background-color: rgba(124, 127, 128, 0.97);
+}
+
+#Div4 a {
+    
+	font-size: 1.8em;
+	margin: 0px;
+	text-align: center;
+	color: #fffefe;
+
+}
+
+#Div4 a:hover {
+	color: #000;
+}
+
+section {
+	width: 100%;
+	margin-bottom: 40px;
+}
+
+.izq {
+	text-align: left;
+	margin: 0px;
+	padding: 0px;
+}
+
+.der {
+	text-align: right;
+	
+}
+
+/*//////////////////////////////////////////////*/
+@media (min-width: 100px) and (max-width: 320px){
+	#Div1{
+	font-size: 1.8em;
+	margin: 0px;
+	padding-bottom: 0px;
+	}
+	
+	
+	
+	
+/*
+	header img:hover{
+	cursor: pointer;
+	transform: scale(4);
+	-moz-transform: scale(4);	
+	-webkit-transform: scale(4);	
+	-ms-transform: scale(4);	
+	-o-transform: scale(4);	
+		
+		
+}
+*/
+/*.table_responsive{
+	display: none;
+}*/
+	
+
+}
+/*Pantalla del movil*/
+@media (min-width: 320px) and (max-width: 479px){
+	#Div1{
+	font-size: 1.9em;
+	margin: 20px;
+	padding-bottom: 15px;
+	}	
+	
+	#Div2{
+	text-align: center;
+	font-size: 1.2em;
+	margin: 0px;
+	padding-bottom: 0px;
+	}
+	
+	/*.table_responsive{
+		display: none;
+	}*/
+	
+
+	
+
+}
+
+@media (min-width: 480px) and (max-width: 845px){
+	
+	    
+	#Div2{
+	text-align: center;
+	font-size: 1.2em;
+	margin: 0px;
+	padding-bottom: 0px;
+	}
+
+	/*.table_responsive{
+		display: none;
+	}*/
+	
+/*
+	header img:hover{
+	cursor: pointer;
+	transform: scale(5);
+	-moz-transform: scale(5);	
+	-webkit-transform: scale(5);	
+	-ms-transform: scale(5);	
+	-o-transform: scale(5);	
+}
+*/
+table {
+	
+	width: 50%;
+	margin-left: auto;
+  margin-right: auto;
+	padding: 0;
+	border-collapse: collapse;
+	border-spacing: 1 px;
+	font-size: 13px;
+}
+
+
+
+
+
+
+.table_responsive tr {
+	margin-bottom: 8px;
+	/*border-bottom:  4px solid #ddd;*/
+	display: block;
+	border-top: 20px;
+}
+
+.table_responsive td {
+	display: block;
+	border-bottom: 4 px solid #ddd;
+	text-align: right;
+	
+	
+}
+	
+	.table_responsive td:last-child {
+		border-bottom: 0px;
+	}
+
+	.table_responsive td:before {
+		content: attr(data-label);
+		font-weight: bold;
+		text-transform: uppercase;
+		float: left;
+		
+	}
+
+	.table_responsive th{
+		display: none;
+	}
+
+	
+/*
+	header img:hover{
+		cursor: pointer;
+		transform: scale(5);
+		-moz-transform: scale(5);	
+		-webkit-transform: scale(5);	
+		-ms-transform: scale(5);	
+		-o-transform: scale(5);
+}
+*/
+
+		
+@media (min-width: 575px) and (max-width: 1199.99px){
+		
+	#Div2{
+	text-align: center;
+	font-size: 1.2em;
+	margin: 0px;
+	padding-bottom: 0px;
+	}
+	
+	
+	/*.table_responsive{
+		display: none;
+	}*/
+	    
+/*
+	header img:hover{
+	cursor: pointer;
+	transform: scale(5);
+	-moz-transform: scale(5);	
+	-webkit-transform: scale(5);	
+	-ms-transform: scale(5);	
+	-o-transform: scale(5);
+}
+	
+*/
+
+/*Pantalla principal Asus*/
+@media (min-width: 1200px) and (max-width: 1280px){
+	
+	
+	#Div2{
+	text-align: center;
+	font-size: 1.2em;
+	margin: 0px;
+	padding-bottom: 0px;
+	}
+	
+	/*.table_responsive{
+		display: none;
+	}*/
+	
+	    
+	
+}
+@media (min-width: 1300px) and (max-width: 1679.99px){
+	
+	
+	#Div2{
+	text-align: center;
+	font-size: 1.2em;
+	margin: 0px;
+	padding-bottom: 0px;
+	}
+	
+	/*.table_responsive{
+		display: none;
+	}*/
+	
+	
+
+}
+
+@media (min-width: 1680px) and (max-width: 1919.99px){
+	 
+	/*.table_responsive{
+		display: none;
+	}*/
+}
+
+

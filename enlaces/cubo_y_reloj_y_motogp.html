@@ -1,0 +1,1367 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Rubik + Reloj Mundial + MotoGP 2026 — Multi Puzzle</title>
+<style>
+:root { --bg:#000; --card:#0b0b0b; --muted:#9aa3ac; --white:#fff; }
+body { background: var(--bg); color: var(--white); font-family: Inter, Arial, sans-serif; margin:0; padding:18px;}
+h1 { margin:0 0 12px; font-size:26px; }
+.section { background: rgba(255,255,255,0.02); padding:12px; border-radius:10px; margin-bottom:14px; border:1px solid rgba(255,255,255,0.04);}
+.flex { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+input, button, select { background:transparent; border:1px solid rgba(255,255,255,0.08); color:var(--white); padding:8px; border-radius:8px; }
+#cubeType { background:#111; color:#fff; border:1px solid rgba(255,255,255,0.2); padding:8px 12px; border-radius:8px; font-weight:600; cursor:pointer; }
+#cubeType:hover { background:#222; }
+#algorithmCategory {
+  background: #111;
+
+  color: #fff;
+  border:1px solid rgba(255,255,255,0.2);
+  border-radius:6px;
+  padding:6px 10px;
+}
+#algorithmCategory option {
+  background:#111;
+  color:#fff;
+}
+button { cursor:pointer; transition:background 0.3s, transform 0.2s; }
+button:hover { background:rgba(255,255,255,0.08); transform:scale(1.03); }
+.grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:12px; margin-top:12px; }
+.card { background: var(--card); padding:10px; border-radius:10px; border:1px solid rgba(255,255,255,0.03); }
+.label { font-weight:700; }
+.tz { color:var(--muted); font-size:13px; }
+.time { font-family:ui-monospace,Menlo; font-size:18px; margin-top:4px; font-weight:700; }
+.date { color:var(--muted); font-size:12px; }
+.muted { color: var(--muted); }
+.small { font-size:13px; padding:6px 8px; border-radius:8px; }
+.race-list { max-height:520px; overflow:auto; margin-top:8px; padding-right:6px; }
+.race-row { display:flex; align-items:center; justify-content:space-between; padding:8px; border-radius:8px; border:1px solid rgba(255,255,255,0.02); margin-bottom:8px; flex-wrap:wrap; }
+.race-info { display:flex; flex-direction:column; gap:4px; min-width:180px; }
+.small-input { padding:6px; border-radius:6px; border:1px solid rgba(255,255,255,0.06); background:transparent; color:var(--white); }
+.top-section { display:flex; gap:20px; flex-wrap:wrap; justify-content:space-between;}
+.rubik-section { flex:1; min-width:320px; }
+.clocks-section { flex:1; min-width:260px; max-height:500px; overflow-y:auto; display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+.scramble { font-family:monospace; font-size:24px; margin-bottom:6px; white-space:pre-wrap; word-break:break-word; }
+#startStopRubik { font-size:16px; padding:12px 20px; border-radius:10px; min-height:30px; background:#007a00; border:1px solid #007a00; }
+#startStopRubik.running { background:#a40000; border-color:#a40000; }
+#rubikTimesList div { padding:6px 8px; border-radius:6px; background:rgba(255,255,255,0.02); margin-top:6px; font-family:ui-monospace,Menlo; }
+#timerSection { margin-top:20px; padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,0.04); background: rgba(255,255,255,0.02); display:none;}
+#timerDisplay { font-size:24px; font-weight:700; margin-bottom:8px;}
+#notesSection { margin-top:20px; padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,0.04); background: rgba(255,255,255,0.02); display:none;}
+#notesText { width:100%; height:80px; background:transparent; color:#fff; border:1px solid rgba(255,255,255,0.06); border-radius:6px; padding:6px; font-family:ui-monospace,Menlo; }
+#rubikStats { margin-bottom:10px; }
+#algorithmDisplay { padding:6px; border-radius:6px; border:1px solid rgba(255,255,255,0.06); background:transparent; color:var(--white); }
+</style>
+</head>
+<body>
+
+<h1>Rubik + Reloj Mundial + MotoGP 2026 — Multi Puzzle</h1>
+
+<audio id="alarmSound" src="https://www.soundjay.com/buttons/sounds/beep-07.mp3" preload="auto"></audio>
+
+<div class="top-section">
+  <!-- Cronómetro Rubik -->
+  <div class="section rubik-section">
+    <div style="margin-bottom:8px;">
+      <label for="cubeType">Tipo de puzzle:</label>
+      <select id="cubeType" class="small-input">
+        <option value="2">2x2</option>
+        <option value="3" selected>3x3</option>
+        <option value="4">4x4</option>
+        <option value="5">5x5</option>
+        <option value="6">6x6</option>
+        <option value="7">7x7</option>
+        <option value="megaminx">Megaminx</option>
+        <option value="pyraminx">Pyraminx</option>
+        <option value="skewb">Skewb</option>
+        <option value="sq1">Square-1</option>
+        <option value="clock">Rubik's Clock</option>
+      </select>
+    </div>
+
+    <div class="scramble" id="scrambleDisplay"></div>
+    <div id="timerDisplayRubik" style="font-family:ui-monospace,Menlo; font-size:18px; margin-bottom:6px;">00:00.00</div>
+
+    <!-- Estadísticas Rubik arriba del cronómetro -->
+    <div id="rubikStats">
+      Mejor: <span id="bestTime">--:--.--</span><br>
+      Peor: <span id="worstTime">--:--.--</span><br>
+      Media: <span id="avgTime">--:--.--</span>
+    </div>
+
+    <div style="display:flex; gap:6px; align-items:center; flex-wrap:wrap; margin-bottom:6px;">
+      <button id="startStopRubik">⏱️ Iniciar/Detener</button>
+      <button id="resetRubikTimes" class="small">🗑️ Borrar todos los tiempos</button>
+      <button id="deleteLastTime" class="small">❌ Borrar último tiempo</button>
+      <button id="newScrambleRubik" class="small">🔀 Nueva mezcla</button>
+      <button id="copyRubikTimes" class="small">📋 Copiar todos los tiempos</button>
+    </div>
+
+    <div>
+      <div class="muted">Últimos tiempos:</div>
+      <div id="rubikTimesList"></div>
+    </div>
+  </div>
+
+  <!-- Relojes -->
+  <div class="section clocks-section" id="clocksContainer"></div>
+</div>
+<!-- Algoritmos -->
+<div class="section" id="algorithmsWrapper">
+  <button id="toggleAlgorithms" class="small">Mostrar Algoritmos</button>
+  <div id="algorithmsSection" style="display:none; margin-top:8px;">
+    <select id="algorithmCategory" class="small-input">
+      <option value="">Selecciona categoría</option>
+      <option>F2L</option>
+      <option>OLL</option>
+      <option>OLL - OH</option>
+      <option>PLL</option>
+      <option>PLL - OH</option>
+      <option>PLL-SKIP</option>
+      <option>AntiSexy</option>
+      <option>Edge Control</option>
+      <option>MAGIC WONDENFUL</option>
+      <option>Sledge Hammer</option>
+      <option>VLS</option>
+      <option>WV</option>
+      <option>ZBLL - AS</option>
+      <option>ZBLL - S</option>
+      <option>ZBLL - L</option>
+      <option>ZBLL - U</option>
+      <option>ZBLL - T</option>
+      <option>ZBLL - Pi</option>
+      <option>ZBLL - H</option>
+    </select>
+    <div id="algorithmDisplay" style="margin-top:10px; font-family:ui-monospace,Menlo;"></div>
+  </div>
+</div>
+<!-- Notas -->
+<div class="section" id="notes-section">
+  <button id="toggleNotes" class="small">Mostrar notas</button>
+  <div id="notesSection">
+    <textarea id="notesText" placeholder="Escribe tus notas aquí..."></textarea><br>
+    <button id="copyNotes" class="small">📋 Copiar notas</button>
+  </div>
+</div>
+<!-- MotoGP -->
+<div class="section" id="motogp-section" style="margin-top:50px;">
+  <button id="toggleRaces" class="small">Mostrar carreras MotoGP</button>
+  <div id="raceControls" style="display:none; margin-top:8px;">
+    <div id="raceList"></div>
+  </div>
+</div>
+<!-- Temporizador -->
+<div class="section" id="timerWrapper">
+  <button id="toggleTimer" class="small">Mostrar temporizador</button>
+  <div id="timerSection">
+    <div id="timerDisplay">00:00</div>
+    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+      <input type="number" id="timerMinutes" placeholder="Minutos" class="small-input" style="width:100px;">
+      <input type="number" id="timerSeconds" placeholder="Segundos" class="small-input" style="width:100px;">
+      <button id="startTimer" class="small">⏳ Iniciar Temporizador</button>
+      <button id="resetTimer" class="small">🔄 Reiniciar</button>
+    </div>
+  </div>
+</div>
+<script>
+// ----------------- SCRAMBLES -----------------
+let cubeType=document.getElementById("cubeType").value;
+const scrambleDisplay=document.getElementById("scrambleDisplay");
+let currentScramble="";
+const rubikTimesList=document.getElementById("rubikTimesList");
+let rubikAttemptCounts={};
+let rubikRunning=false;
+let rubikTimer=null;
+let startTime=0;
+
+function choice(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+function randInt(min,max){return Math.floor(Math.random()*(max-min+1))+min;}
+
+function genScrambleNxN(n){
+  const faces=["U","D","L","R","F","B"];
+  const suffixes=["","'","2"];
+  let moves=[]; faces.forEach(face=>{ suffixes.forEach(s=>moves.push(face+s)); if(n>=4) suffixes.forEach(s=>moves.push(face+"w"+s)); });
+  const lengths={2:9,3:20,4:40,5:60,6:80,7:100};
+  const len=lengths[n]||20; let scramble=[]; let last="";
+  for(let i=0;i<len;i++){ let m; do{ m=choice(moves);} while(m[0]===last); scramble.push(m); last=m[0]; }
+  return scramble.join(" ");
+}
+function genMegaminx(){ const moves = ["R++","R--","D++","D--","U","U'"]; let scramble = []; for(let i=0;i<50;i++) scramble.push(choice(moves)); return scramble.join(" "); }
+function genPyraminx(){ const faceMoves = ["U","L","R","B"]; const tipMoves = ["u","l","r"]; const faceSuffix = ["","'"]; const tipSuffix = ["","'"]; let scrambleFaces=[], scrambleTips=[]; let last=""; for(let i=0;i<8;i++){ let m; do{ m = choice(faceMoves)+choice(faceSuffix); }while(m[0]===last); scrambleFaces.push(m); last=m[0]; } for(let i=0;i<3;i++) scrambleTips.push(choice(tipMoves)+choice(tipSuffix)); return scrambleFaces.join(" ")+" "+scrambleTips.join(" "); }
+function genSkewb(){ const moves=["R","L","U","B"]; const suffix=["","'"]; let s=[], last=""; for(let i=0;i<11;i++){ let m; do{ m = choice(moves)+choice(suffix); }while(m[0]===last); s.push(m); last=m[0]; } return s.join(" "); }
+function genSquare1(){ const parts=[]; for(let i=0;i<12;i++){ let a=randInt(-6,6), b=randInt(-6,6); if(a===0 && b===0) a=1; parts.push(`(${a},${b})/`); } return parts.join(" "); }
+function genClock(){ const clockMoves=["dUUU","UddU","UUUd","Uddd","ddUd","ddUU","dUUd","dUdd"]; const clockXs=[1,2,3,4]; const clockYs=[-2,-1,1,2,3,4,5]; const length=randInt(10,15); let s=[]; for(let i=0;i<length;i++){ s.push(`(${choice(clockMoves)},${choice(clockXs)},${choice(clockYs)})`); } return s.join(" "); }
+
+function genScrambleFor(type){ if(!type) type="3"; if(["2","3","4","5","6","7"].includes(type)) return genScrambleNxN(Number(type)); if(type==="megaminx") return genMegaminx(); if(type==="pyraminx") return genPyraminx(); if(type==="skewb") return genSkewb(); if(type==="sq1") return genSquare1(); if(type==="clock") return genClock(); return genScrambleNxN(3); }
+
+function showScramble(){ currentScramble=genScrambleFor(cubeType); scrambleDisplay.textContent=currentScramble; }
+document.getElementById("cubeType").onchange=e=>{ cubeType=e.target.value; showScramble(); rubikAttemptCounts[cubeType]=rubikAttemptCounts[cubeType]||0; };
+document.getElementById("newScrambleRubik").onclick=showScramble;
+showScramble();
+
+// ----------------- CRONÓMETRO -----------------
+let timerDisplayRubik=document.getElementById("timerDisplayRubik");
+
+function parseTimeToSeconds(timeStr){ const [minSec, dec] = timeStr.split("."); const [min, sec] = minSec.split(":").map(Number); return min*60 + sec + Number(dec)/100; }
+function formatSecondsToTime(sec){ const m = Math.floor(sec/60); const s = Math.floor(sec%60); const d = Math.floor((sec - Math.floor(sec))*100); return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}.${String(d).padStart(2,'0')}`; }
+function updateRubikStats(){ const times = Array.from(rubikTimesList.querySelectorAll("div")).map(d=>{ const t = d.textContent.match(/Tiempo: (\d{2}:\d{2}\.\d{2})/); return t ? parseTimeToSeconds(t[1]) : null; }).filter(Boolean); if(times.length===0){ document.getElementById("bestTime").textContent="--:--.--"; document.getElementById("worstTime").textContent="--:--.--"; document.getElementById("avgTime").textContent="--:--.--"; return; } const best=Math.min(...times); const worst=Math.max(...times); const avg=times.reduce((a,b)=>a+b,0)/times.length; document.getElementById("bestTime").textContent=formatSecondsToTime(best); document.getElementById("worstTime").textContent=formatSecondsToTime(worst); document.getElementById("avgTime").textContent=formatSecondsToTime(avg); }
+
+document.getElementById("startStopRubik").onclick=()=>{ if(!rubikRunning){ rubikRunning=true; startTime=Date.now(); rubikTimer=setInterval(updateRubikDisplay,10); document.getElementById("startStopRubik").classList.add("running"); } else { rubikRunning=false; clearInterval(rubikTimer); document.getElementById("startStopRubik").classList.remove("running"); rubikAttemptCounts[cubeType] = rubikAttemptCounts[cubeType]? rubikAttemptCounts[cubeType]+1:1; const attempt = rubikAttemptCounts[cubeType]; const totalTime = timerDisplayRubik.textContent; const div = document.createElement("div"); div.textContent=`${attempt}. Tipo: ${cubeType}, Tiempo: ${totalTime}, Scramble: ${currentScramble}`; rubikTimesList.prepend(div); timerDisplayRubik.textContent="00:00.00"; showScramble(); updateRubikStats(); } };
+
+function updateRubikDisplay(){ const total=(rubikRunning?Date.now()-startTime:0); const mins=Math.floor(total/60000); const secs=Math.floor(total/1000)%60; const dec=Math.floor((total%1000)/10); timerDisplayRubik.textContent=`${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}.${String(dec).padStart(2,'0')}`; }
+
+document.getElementById("resetRubikTimes").onclick=()=>{ rubikTimesList.innerHTML=""; rubikAttemptCounts={}; rubikRunning=false; clearInterval(rubikTimer); timerDisplayRubik.textContent="00:00.00"; updateRubikStats(); };
+
+document.getElementById("deleteLastTime").onclick=()=>{ const last=rubikTimesList.querySelector("div"); if(last) last.remove(); updateRubikStats(); };
+
+document.getElementById("copyRubikTimes").onclick = () => { let text = ""; rubikTimesList.querySelectorAll("div").forEach(div => text += div.textContent+"\n"); if(text) navigator.clipboard.writeText(text).then(()=>alert("✅ Tiempos copiados")).catch(()=>alert("❌ No se pudo copiar")); else alert("No hay tiempos para copiar"); };
+
+// ----------------- TEMPORIZADOR -----------------
+let timerInterval=null,remainingTime=0;
+const timerDisplay=document.getElementById("timerDisplay"),alarm=document.getElementById("alarmSound");
+function updateTimerDisplay(){ const mins=Math.floor(remainingTime/60),secs=remainingTime%60; timerDisplay.textContent=`${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;}
+document.getElementById("startTimer").onclick=function(){ if(timerInterval)return; const mins=parseInt(document.getElementById("timerMinutes").value)||0; const secs=parseInt(document.getElementById("timerSeconds").value)||0; remainingTime=mins*60+secs; if(remainingTime<=0)return alert("Ingresa tiempo válido"); updateTimerDisplay(); timerInterval=setInterval(()=>{ remainingTime--; updateTimerDisplay(); if(remainingTime<=0){ clearInterval(timerInterval); timerInterval=null; updateTimerDisplay(); alert("⏰ ¡Tiempo terminado!"); alarm.play().catch(e=>console.log("Reproducción bloqueada")); } },1000);};
+document.getElementById("resetTimer").onclick=function(){ clearInterval(timerInterval); timerInterval=null; remainingTime=0; updateTimerDisplay(); };
+
+// ----------------- RELOJES -----------------
+const userZones=[ {label:"España (Málaga)",tz:"Europe/Madrid"}, {label:"Nueva York",tz:"America/New_York"}, {label:"Londres",tz:"Europe/London"}, {label:"Moscú",tz:"Europe/Moscow"}, {label:"Dubái",tz:"Asia/Dubai"}, {label:"Honolulu",tz:"Pacific/Honolulu"}, ];
+function updateClocks(){ const container=document.getElementById("clocksContainer"); container.innerHTML=""; userZones.forEach(z=>{ const t=new Intl.DateTimeFormat("es-ES",{timeZone:z.tz,hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:false}).format(new Date()); const d=new Intl.DateTimeFormat("es-ES",{timeZone:z.tz,weekday:"long",year:"numeric",month:"long",day:"numeric"}).format(new Date()); const div=document.createElement("div"); div.className="card"; div.innerHTML=`<div class="label">${z.label}</div><div class="tz">${z.tz}</div><div class="time">${t}</div><div class="date">${d}</div>`; container.appendChild(div); }); }
+updateClocks();
+setInterval(updateClocks,1000);
+
+// ----------------- MotoGP -----------------
+const races = [
+  {round:1, name:"GP de Tailandia", circuit:"Buriram", country:"Tailandia", tz:"Asia/Bangkok", date:"2026-03-01"},
+  {round:2, name:"GP de Brasil", circuit: "Estrella Galicia 0,0 Grand Prix of Brazil", country: "Brasil", tz: "America/Sao_Paulo", date: "2026-03-20"},
+  {round:3, name:"GP de EE.UU.", circuit:"Circuitos de las Americas", country:"EEUU", tz:"America/Chicago", date:"2026-03-30"},
+  {round:4, name:"GP de Qatar", circuit:"Losail", country:"Qatar", tz:"Asia/Qatar", date:"2026-04-12"},
+  {round:5, name:"GP de España", circuit:"Jerez", country:"España", tz:"Europe/Madrid", date:"2026-04-26"},
+  {round:6, name:"GP de Francia", circuit:"Le Mans", country:"Francia", tz:"Europe/Paris", date:"2026-05-10"},
+  {round:7, name:"GP de Inglaterra", circuit:"Silverstone", country:"Reino Unido", tz:"Europe/London", date:"2026-05-24"},
+  {round:8, name:"GP de España", circuit:"Aragon - Motorland", country:"España", tz:"Europe/Madrid", date:"2026-06-07"},
+  {round:9, name:"GP de Italia", circuit:"Mugello", country:"Italia", tz:"Europe/Rome", date:"2026-06-21"},
+  {round:10, name:"GP de Holanda", circuit:"Assen", country:"Países Bajos", tz:"Europe/Amsterdam", date:"2026-06-28"},
+  {round:11, name:"GP de Alemania", circuit:"Sachsenring", country:"Alemania", tz:"Europe/Berlin", date:"2026-07-12"},
+  {round:12, name:"GP de República Checa", circuit:"Brno", country:"República Checa", tz:"Europe/Prague", date:"2026-07-19"},
+  {round:13, name:"GP de Austria", circuit:"Österreichring", country:"Austria", tz:"Europe/Vienna", date:"2026-08-16"},
+  {round:14, name:"GP de Hungría", circuit:"Balaton Park", country:"Hungría", tz:"Europe/Budapest", date:"2026-08-23"},
+  {round:15, name:"GP de España", circuit:"Catalunya - Montmeló", country:"España", tz:"Europe/Madrid", date:"2026-09-06"},
+  {round:16, name:"GP de San Marino", circuit:"Misano", country:"Italia", tz:"Europe/Rome", date:"2026-09-13"},
+  {round:17, name:"GP de Japón", circuit:"Motegi", country:"Japón", tz:"Asia/Tokyo", date:"2026-09-27"},
+  {round:18, name:"GP de Indonesia", circuit:"Pertamina Mandalika Circuit", country:"Indonesia", tz:"Asia/Jakarta", date:"2026-10-04"},
+  {round:19, name:"GP de Australia", circuit:"Philip Island", country:"Australia", tz:"Australia/Melbourne", date:"2026-10-18"},
+  {round:20, name:"GP de Malasia", circuit:"Sepang", country:"Malasia", tz:"Asia/Kuala_Lumpur", date:"2026-10-25"},
+  {round:21, name:"GP de Portugal", circuit:"Portimao", country:"Portugal", tz:"Europe/Lisbon", date:"2026-11-08"},
+  {round:22, name:"GP de España", circuit:"Valencia - Cheste", country:"España", tz:"Europe/Madrid", date:"2026-11-15"}
+];
+
+document.getElementById("toggleRaces").onclick = () => {
+  const controls = document.getElementById("raceControls");
+  controls.style.display = controls.style.display === "none" ? "block" : "none";
+  renderRaces();
+};
+
+function renderRaces() {
+  const container = document.getElementById("raceList");
+  container.innerHTML = "";
+  races.forEach(r => {
+    // Hora actual en la zona horaria de la carrera
+    const now = new Date();
+    const timeOptions = { timeZone: r.tz, hour:"2-digit", minute:"2-digit", second:"2-digit", hour12:false };
+    const dateOptions = { timeZone: r.tz, year:"numeric", month:"2-digit", day:"2-digit" };
+    const localTime = new Intl.DateTimeFormat("es-ES", timeOptions).format(now);
+    const raceDate = new Intl.DateTimeFormat("es-ES", dateOptions).format(new Date(r.date));
+
+    const div = document.createElement("div");
+    div.className = "race-row";
+    div.innerHTML = `<div class="race-info">
+      <strong>${r.round}. ${r.name}</strong><br>
+      ${r.circuit} — ${r.country}<br>
+      Fecha: ${raceDate}<br>
+      Hora local: ${localTime}
+    </div>`;
+    container.appendChild(div);
+  });
+}
+
+// Actualiza cada segundo
+setInterval(() => {
+  if(document.getElementById("raceControls").style.display === "block") renderRaces();
+}, 1000);
+// ----------------- NOTAS -----------------
+document.getElementById("toggleNotes").onclick=()=>{ const notes=document.getElementById("notesSection"); notes.style.display=notes.style.display==="none"?"block":"none"; };
+document.getElementById("copyNotes").onclick=()=>{ const t=document.getElementById("notesText").value; if(t) navigator.clipboard.writeText(t).then(()=>alert("✅ Notas copiadas")).catch(()=>alert("❌ No se pudo copiar")); else alert("No hay notas para copiar"); };
+
+// ----------------- TEMPORIZADOR OCULTO -----------------
+document.getElementById("toggleTimer").onclick=()=>{ const t=document.getElementById("timerSection"); t.style.display=t.style.display==="none"?"block":"none"; };
+
+// ----------------- ALGORITMOS -----------------
+const algorithmData = {
+  "F2L": [""], 
+  "OLL": [""], 
+  "OLL - OH": ["R U2 R2 U' R2 U' R2 U2 R"],
+  "PLL": [""],
+  "PLL - OH": ["R2 U R U R' U' R' U' R' U R'"],
+  "PLL-SKIP": ["R U R' U'"],
+  "AntiSexy": ["R U R' U' R' F R2 U' R' U' R U R' F'"],
+  "Edge Control": ["U R U' R' U' F R U R' U' R' F R"],
+  "MAGIC WONDENFUL": ["R U R' U R U2 R'"],
+  "Sledge Hammer": ["R' F R F'"],
+  "VLS": ["R' U' R U' R' U2 R"],
+  "WV": ["R U R' U R U2 R'"],
+  "ZBLL - AS": ["U R' U' R U R' U R U R' U' R U R' U R"],
+  "ZBLL - S": ["R U R' U' R' F R2 U R' U R U R' F'"],
+  "ZBLL - L": ["R2 U R U R' U' R' U' R' U R'"],
+  "ZBLL - U": ["R U2 R2 U' R2 U' R2 U2 R"],
+  "ZBLL - T": ["R U R' U' R' F R F'"],
+  "ZBLL - Pi": ["R' U' R U' R' U2 R"],
+  "ZBLL - H": ["R2 U2 R U R U' R U R U2 R"]
+};
+
+document.getElementById("toggleAlgorithms").onclick = ()=>{ const sec = document.getElementById("algorithmsSection"); sec.style.display = sec.style.display==="none"?"block":"none"; };
+
+document.getElementById("algorithmCategory").onchange = (e) => {
+    const cat = e.target.value;
+    const display = document.getElementById("algorithmDisplay");
+
+    if (cat === "F2L") {
+        display.innerHTML = `
+        <table border="1">
+  <tr>
+    <td><img src="img-cubos/f2l/F2l-1.jpg" alt="F2L Ejemplo 1" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+    <td><img src="img-cubos/f2l/F2l-2.jpg" alt="F2L Ejemplo 2" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+  </tr>
+  <tr>
+    <td>1. ( R U2 R') ( U' R U R')</td>
+    <td>2. y' ( R' U2)( R U R' U' R)</td>
+  </tr>
+  <tr>
+    <td><img src="img-cubos/f2l/F2l-3.jpg" alt="F2L Ejemplo 3" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+    <td><img src="img-cubos/f2l/F2l-4.jpg" alt="F2L Ejemplo 4" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+  </tr>
+  <tr>
+    <td>3. R U R' U2 ( R U R' U') R U R' // U2 R2 U2 R' U' R U' R2</td>
+    <td>4. F U ( R U' R' F') ( R U' R') // U' R U R2 F R F' R U' R'</td>
+  </tr>
+  <tr>
+    <td><img src="img-cubos/f2l/F2l-5.jpg" alt="F2L Ejemplo 5" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+    <td><img src="img-cubos/f2l/F2l-6.jpg" alt="F2L Ejemplo 6" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+  </tr>
+  <tr>
+    <td>5. U' ( R' F R F') ( R U' R')
+</td>
+    <td>6. U' F R' F' R U' R U R' // ( R U R' U')2 ( R U R')
+</td>
+  </tr>
+  <tr>
+    <td><img src="img-cubos/f2l/F2l-7.jpg" alt="F2L Ejemplo 7" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1)" /></td>
+    <td><img src="img-cubos/f2l/F2l-8.jpg" alt="F2L Ejemplo 8" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+  </tr>
+  <tr>
+    <td>7. ( U R U' R')
+</td>
+    <td>8. y' ( U' R' U R)
+</td>
+  </tr>
+  <tr>
+    <td><img src="img-cubos/f2l/F2l-9.jpg" alt="F2L Ejemplo 9" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+    <td><img src="img-cubos/f2l/F2l-10.jpg" alt="F2L Ejemplo 10" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+  </tr>
+  <tr>
+    <td>9. U' ( R U2' R' U ) y' ( R' U' R)
+</td>
+    <td>10. R U' R' U R U' R' U2 R U' R'
+</td>
+  </tr>
+  <tr>
+    <td><img src="img-cubos/f2l/F2l-11.jpg" alt="F2L Ejemplo 11" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+    <td><img src="img-cubos/f2l/F2l-12.jpg" alt="F2L Ejemplo 12" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+  </tr>
+  <tr>
+    <td>11. y' U ( R' U R U') ( R' U' R)
+</td>
+    <td>12. U' ( R U' R' U)( R U R')
+</td>
+  <tr>
+    <td><img src="img-cubos/f2l/F2l-13.jpg" alt="F2L Ejemplo 13" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+    <td><img src="img-cubos/f2l/F2l-14.jpg" alt="F2L Ejemplo 14" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+  </tr>
+  <tr>
+    <td>13. R U R' U2 R U' R' U R U' R'
+</td>
+    <td>14. ( R U' R' U2) y' ( R' U' R) // R' D' F R U' R' D R Biel Salmons
+</td>
+<tr>
+    <td><img src="img-cubos/f2l/F2l-15.jpg" alt="F2L Ejemplo 15" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1)" /></td>
+    <td><img src="img-cubos/f2l/F2l-16.jpg" alt="F2L Ejemplo 16" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1)"/></td>
+  </tr>
+  <tr>
+    <td>15. U' ( R U' R') U2 ( R U' R')
+</td>
+    <td>16. U R U R' U2' R U R' // U' ( R U2' R' U) ( R U R')
+</td>
+  </tr>
+  <tr>
+    <td><img src="img-cubos/f2l/F2l-17.jpg" alt="F2L Ejemplo 17" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1)" /></td>
+    <td><img src="img-cubos/f2l/F2l-18.jpg" alt="F2L Ejemplo 18" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1)"/></td>
+  </tr>
+  <tr>
+    <td>17. y' U ( R' U' R U') y ( R U R')
+</td>
+    <td>18. U' ( R U R' U) y' ( R' U' R)
+</td>
+  </tr>
+  <tr>
+    <td><img src="img-cubos/f2l/F2l-19.jpg" alt="F2L Ejemplo 19" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1)" /></td>
+    <td><img src="img-cubos/f2l/F2l-20.jpg" alt="F2L Ejemplo 20" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1)"/></td>
+  </tr>
+  <tr>
+    <td>19. R U' R' U' R U' R' ( r U' R' U R U r') // ( R U' R' U) y' ( R' U2 R U2')( R' U R)
+</td>
+    <td>20. ( R U R' U') ( R U2' R' U') ( R U R')
+</td>
+  </tr>
+  <tr>
+    <td><img src="img-cubos/f2l/F2l-21.jpg" alt="F2L Ejemplo 21" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1)" /></td>
+    <td><img src="img-cubos/f2l/F2l-22.jpg" alt="F2L Ejemplo 22" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1)"/></td>
+  </tr>
+  <tr>
+    <td>21. ( R U' R' U) ( R U2)( R' U R U' R')
+</td>
+    <td>22. R ( F U R U' R' F' U' R') // ( R U' R')( U' R U' R' U) y' ( R' U' R)
+</td>
+  </tr>
+    <tr>
+    <td><img src="img-cubos/f2l/F2l-23.jpg" alt="F2L Ejemplo 23" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1)" /></td>
+    <td><img src="img-cubos/f2l/F2l-24.jpg" alt="F2L Ejemplo 24" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1)"/></td>
+  </tr>
+  <tr>
+    <td>23. ( R U) F ( R U R' U') F' R'
+</td>
+    <td>24. y' ( R' U' R)
+</td>
+  </tr>
+  <tr>
+    <td><img src="img-cubos/f2l/F2l-25.jpg" alt="F2L Ejemplo 25" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1)" /></td>
+    <td><img src="img-cubos/f2l/F2l-26.jpg" alt="F2L Ejemplo 26" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1)"/></td>
+  </tr>
+  <tr>
+    <td>25. ( R U R')
+</td>
+    <td>26. U' ( R U R' U') ( R U2' R')
+</td>
+  </tr>
+    <tr>
+    <td><img src="img-cubos/f2l/F2l-27.jpg" alt="F2L Ejemplo 27" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1)" /></td>
+    <td><img src="img-cubos/f2l/F2l-28.jpg" alt="F2L Ejemplo 28" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1)"/></td>
+  </tr>
+  <tr>
+    <td>27. y' ( U R' U' R) ( U2' R' U R)
+</td>
+    <td>28. U' ( R U2') ( R' U2)( R U' R')
+</td>
+  </tr>
+  <tr>
+    <td><img src="img-cubos/f2l/F2l-29.jpg" alt="F2L Ejemplo 29" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1)" /></td>
+    <td><img src="img-cubos/f2l/F2l-30.jpg" alt="F2L Ejemplo 30" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1)"/></td>
+  </tr>
+  <tr>
+    <td>29. y' ( U R' U2) ( R U2' R' U R)
+</td>
+    <td>30. y' U ( R' U' R U') ( R' U' R)
+</td>
+  </tr>
+    <tr>
+    <td><img src="img-cubos/f2l/F2l-31.jpg" alt="F2L Ejemplo 31" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1)" /></td>
+    <td><img src="img-cubos/f2l/F2l-32.jpg" alt="F2L Ejemplo 32" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1)"/></td>
+  </tr>
+  <tr>
+    <td>31. U' ( R U R' U) ( R U R')
+</td>
+    <td>32. U( R U2')( R' U R U') R'
+</td>
+  </tr>
+  <tr>
+    <td><img src="img-cubos/f2l/F2l-33.jpg" alt="F2L Ejemplo 33" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1)" /></td>
+    <td><img src="img-cubos/f2l/F2l-34.jpg" alt="F2L Ejemplo 34" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1)"/></td>
+  </tr>
+  <tr>
+    <td>33. y' ( U' R' U2) ( R U' R' U R)
+</td>
+    <td>34. ( R U' R' U2)( R U R')
+</td>
+  </tr>
+    <tr>
+    <td><img src="img-cubos/f2l/F2l-35.jpg" alt="F2L Ejemplo 35" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1)" /></td>
+    <td><img src="img-cubos/f2l/F2l-36.jpg" alt="F2L Ejemplo 36" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1)"/></td>
+  </tr>
+  <tr>
+    <td>35. y' ( R' U R U2')( R' U' R)
+</td>
+    <td>36. ( R' F' R U)( R U' R' F)
+</td>
+  </tr>
+      <tr>
+    <td><img src="img-cubos/f2l/F2l-37.jpg" alt="F2L Ejemplo 37" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1)" /></td>
+    <td><img src="img-cubos/f2l/F2l-38.jpg" alt="F2L Ejemplo 38" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1)"/></td>
+  </tr>
+  <tr>
+    <td>37. ( U R U' R' U') y' ( R' U R) // r U r' U' r' F r F'
+</td>
+    <td>38. ( R U' R' U)( R U' R')
+</td>
+  </tr>
+        <tr>
+    <td><img src="img-cubos/f2l/F2l-39.jpg" alt="F2L Ejemplo 39" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1)" /></td>
+    <td><img src="img-cubos/f2l/F2l-40.jpg" alt="F2L Ejemplo 40" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1)"/></td>
+  </tr>
+  <tr>
+    <td>39. y'( R' U) ( R U') ( R' U R)
+</td>
+    <td>40. y' ( R' U' R U)( R' U' R)
+</td>
+  </tr>
+     <tr>
+    <td><img src="img-cubos/f2l/F2l-41.jpg" alt="F2L Ejemplo 41" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1)" /></td>
+  </tr>
+  <tr>
+    <td>41. ( R U R' U')( R U R')
+</td>
+ </tr>
+</table>
+        
+        `;
+    } 
+    // --- NUEVA SECCIÓN OLL (57 casos) ---
+    else if (cat === "OLL") {
+        display.innerHTML = `
+          <table border="1">
+            <tr>
+              <td><img src="img-cubos/oll/oll-1.jpg" alt="OLL Caso 1 - Zamboni" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/oll/oll-2.jpg" alt="OLL Caso 2 - Dot" style="width:100px;; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>1. F ( R U R' U') F' f ( R U R' U') f' - Zamboni</td>
+              <td>2. ( R U2') ( R2' F R F') U2' ( R' F R F') - Dot</td>
+            </tr>
+             <tr>
+              <td><img src="img-cubos/oll/oll-3.jpg" alt="OLL Caso 3 - Cow Farm" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/oll/oll-4.jpg" alt="OLL Caso 4 - Excalibur" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>3. f ( R U R' U') f' U' F( R U R' U') F' - Cow Farm</td>
+              <td>4. f ( R U R' U') f' U F ( R U R' U') F' - Excalibur
+</td>
+            </tr>
+            <tr>
+              <td><img src="img-cubos/oll/oll-5.jpg" alt="OLL Caso 5 - Diagonal" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/oll/oll-6.jpg" alt="OLL Caso 6 - Cactus" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>5. ( R U R' U ) ( R' F R F' ) U2' ( R' F R F' ) - Diagonal</td>
+              <td>6. y R U2' ( R2' F R F') U2' M' ( U R U' r') - Cactus</td>
+            </tr>
+            <tr>
+              <td><img src="img-cubos/oll/oll-7.jpg" alt="OLL Caso 7 - Mickey" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/oll/oll-8.jpg" alt="OLL Caso 8 - X" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>7. M U ( R U R' U') M' ( R' F R F') - Mickey</td>
+              <td>8. Feliks M U ( R U R' U') M2' ( U R U' r') // r' ( R U) ( R U R' U' r2) ( R2' U ) ( R U' ) r' - X</td>
+            </tr>
+            <tr>
+              <td><img src="img-cubos/oll/oll-9.jpg" alt="OLL Caso 9 - Double Antisune" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/oll/oll-10.jpg" alt="OLL Caso 10 - Dead Guy" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>9. ( R U2 R' )( U' R U R' )(  U' R U' R' ) - Double Antisune</td>
+              <td>10. ( R U2') ( R2' U')  ( R2 U') ( R2' U2' R) - Dead Guy</td>
+            </tr>
+            <tr>
+              <td><img src="img-cubos/oll/oll-11.jpg" alt="OLL Caso 11 - Angelfish" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/oll/oll-12.jpg" alt="OLL Caso 12 - H" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>11. Feliks  ( r U R' U') M ( U R U' R')  //  ( r U R' U') r' R U R U' R' - Angelfish</td>
+              <td>12. Feliks ( R U R' U') M' ( U R U' r') // R U R' U' r R' U R U' r' - H</td>
+            </tr>
+            <tr>
+              <td><img src="img-cubos/oll/oll-13.jpg" alt="OLL Caso 13 - Headlights" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/oll/oll-14.jpg" alt="OLL Caso 14 - Chameleon" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>13. R2 D ( R' U2 R) D' ( R' U2 R') - Headlights</td>
+              <td>14. Feliks ( r U R' U') ( r' F R F') / r U R' U' L' U R U' // y' l' U' L U l F' L' F - Chameleon</td>
+            </tr>
+            <tr>
+              <td><img src="img-cubos/oll/oll-15.jpg" alt="OLL Caso 15 - Bowtie" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/oll/oll-16.jpg" alt="OLL Caso 16 - Sune" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>15. y F' ( r U R' U' ) r' F R - Bowtie</td>
+              <td>16. R U R' U R U2' R' - Sune</td>
+            </tr>
+            <tr>
+              <td><img src="img-cubos/oll/oll-17.jpg" alt="OLL Caso 17 - Antisune" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/oll/oll-18.jpg" alt="OLL Caso 18 - FRU" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>17. R U2 R' U' R U' R' - Antisune</td>
+              <td>18. F ( R U R' U') F' - FRU</td>
+            </tr>
+            <tr>
+              <td><img src="img-cubos/oll/oll-19.jpg" alt="OLL Caso 19 - T" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/oll/oll-20.jpg" alt="OLL Caso 20 - FUR" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>19. Feliks ( R U R' U') ( R' F R F')  - T</td>
+              <td>20. f ( R U R' U') f ' - FUR</td>
+            </tr>
+            <tr>
+              <td><img src="img-cubos/oll/oll-21.jpg" alt="OLL Caso 21 - FUL" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/oll/oll-22.jpg" alt="OLL Caso 22 - Chair" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>21. R' U' F' U F R  - FUL</td>
+              <td>22. R U B' ( U' R' U) ( R B R') - Chair</td>
+            </tr>
+            <tr>
+              <td><img src="img-cubos/oll/oll-23.jpg" alt="OLL Caso 23 - Phonobooth" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/oll/oll-24.jpg" alt="OLL Caso 24 - Square" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>23. ( R' U' F) ( U R U' R') F' R  - Phonobooth</td>
+              <td>24. r U2 R' U' R U' r' - Square</td>
+            </tr>
+            <tr>
+              <td><img src="img-cubos/oll/oll-25.jpg" alt="OLL Caso 25 - Lefty Square" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/oll/oll-26.jpg" alt="OLL Caso 26 - W" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>25. r' U2' R U R' U r  - Lefty Square</td>
+              <td>26. Feliks ( R U R' U) ( R U' R' U') ( R' F R F') - W</td>
+            </tr>
+            <tr>
+              <td><img src="img-cubos/oll/oll-27.jpg" alt="OLL Caso 27 - Lefty W" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/oll/oll-28.jpg" alt="OLL Caso 28 - Backsune+FRU" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>27. Feliks ( R' U' R U') ( R' U R U) l U' R' U x - Lefty W</td>
+              <td>28. ( r U R' U) ( R U' R' U)( R U2' r') - Backsune+FRU</td>
+            </tr>
+            <tr>
+              <td><img src="img-cubos/oll/oll-29.jpg" alt="OLL Caso 29 - Soccer" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/oll/oll-30.jpg" alt="OLL Caso 30 - Antisune + FRU" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>29. ( r' U' R U') ( R' U R U') R' U2 r - Soccer</td>
+              <td>30. r' U r2 U' R2' U' r2 U r ' - Antisune + FRU</td>
+            </tr>
+            <tr>
+              <td><img src="img-cubos/oll/oll-31.jpg" alt="OLL Caso 31 - Bimp" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/oll/oll-32.jpg" alt="OLL Caso 32 - Akkersdijk" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>31. Feliks r U' r2' U r2 U r2' U' r  // r U' R2' U r2 U r2 U' r - Bimp</td>
+              <td>32. F ( R U R' U' ) 2 F' - Akkersdijk</td>
+            </tr>
+            <tr>
+              <td><img src="img-cubos/oll/oll-33.jpg" alt="OLL Caso 33 - Pancake" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/oll/oll-34.jpg" alt="OLL Caso 34 - C" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>33. F' ( L' U' L U) ( L' U' L U) F - Pancake</td>
+              <td>34. Feliks R' U' ( R' F R F') U R / R y R U R' y L' U L U2 L' - C</td>
+            </tr>
+            <tr>
+              <td><img src="img-cubos/oll/oll-35.jpg" alt="OLL Caso 35 - Umbrella" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/oll/oll-36.jpg" alt="OLL Caso 36 - Seal Bomb" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>35. Feliks ( R U R2' U') ( R' F R U) R U' F' / R U R' U' y' r' U' R U r R' - Umbrella</td>
+              <td>36. ( L F') ( L' U' L U) F U' L' - Seal Bomb</td>
+            </tr>
+            <tr>
+              <td><img src="img-cubos/oll/oll-37.jpg" alt="OLL Caso 37 - Lightning Bolt" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/oll/oll-38.jpg" alt="OLL Caso 38 - Fat Sune" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>37. ( R' F) ( R U R' U') F' U R - Lightning Bolt</td>
+              <td>38. r U R' U R U2' r' - Fat Sune</td>
+            </tr>
+            <tr>
+              <td><img src="img-cubos/oll/oll-39.jpg" alt="OLL Caso 39 - Lamp" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/oll/oll-40.jpg" alt="OLL Caso 40 - Lefty Spinny" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>39. r' U' R U' R' U2 r - Lamp</td>
+              <td>40. Feliks r' ( R2 U R' U R U2 R') U M' / r' R2 U R' U R U2' R' U r R' - Lefty Spinny</td>
+            </tr>
+
+
+            <tr>
+              <td><img src="img-cubos/oll/oll-41.jpg" alt="OLL Caso 41 - Spinny" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/oll/oll-42.jpg" alt="OLL Caso 42 - Fat Akkersdijk" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>41. M' ( R' U' R U' R' U2 R) U' M - Spinny</td>
+              <td>42. f ( R U R' U') ( R U R' U') f' - Fat Akkersdijk</td>
+            </tr>
+            <tr>
+              <td><img src="img-cubos/oll/oll-43.jpg" alt="OLL Caso 43 - Half-A-Tarantula" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/oll/oll-44.jpg" alt="OLL Caso 44 - Fat Akkersdijk" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>43. ( R' U' R U' R' U) y' ( R' U R) B - Half-A-Tarantula</td>
+              <td>44. r' U' r ( U' R' U R) ( U' R' U R) r' U r - Tarantula</td>
+            </tr>
+            <tr>
+              <td><img src="img-cubos/oll/oll-45.jpg" alt="OLL Caso 46 - Not-A-Tarantula" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/oll/oll-46.jpg" alt="OLL Caso 46 - Frying Pan" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>45. r' U' r ( U' R' U R) ( U' R' U R) r' U r - Not-A-Tarantula</td>
+              <td>46. F ( R U' R' U') ( R U R' F') - Frying Pan</td>
+            </tr>
+            <tr>
+              <td><img src="img-cubos/oll/oll-47.jpg" alt="OLL Caso 47 - Turkey" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/oll/oll-48.jpg" alt="OLL Caso 48 - Justin" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>47. ( R U2') ( R2' F R F') ( R U2' R') - Turkey</td>
+              <td>48. ( R U R' U) ( R' F R F') ( R U2' R') - Justin</td>
+            </tr>
+            <tr>
+              <td><img src="img-cubos/oll/oll-49.jpg" alt="OLL Caso 49 - Y" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/oll/oll-50.jpg" alt="OLL Caso 50 - Tetris" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>49. Feliks ( R U R' U') R' F ( R2 U R' U') F' - Y</td>
+              <td>50. Feliks ( r U' r' ) ( U' r U r' ) y' ( R' U R) - Tetris</td>
+            </tr>
+            <tr>
+              <td><img src="img-cubos/oll/oll-51.jpg" alt="OLL Caso 51 - Knight Move" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/oll/oll-52.jpg" alt="OLL Caso 52 - Limeback" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>51. ( R' F R) ( U R' F' R) ( F U' F') - Knight Move</td>
+              <td>52. ( r U r') ( R U R' U') ( r U' r') - Limeback</td>
+            </tr>
+            <tr>
+              <td><img src="img-cubos/oll/oll-53.jpg" alt="OLL Caso 53 - Slipper" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/oll/oll-54.jpg" alt="OLL Caso 54 - Solar Beam" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>53. ( r' U' r) ( R' U' R U)( r ' U r) - Slipper</td>
+              <td>54. ( R U R' U R U2' R') F ( R U R' U') F' - Solar Beam</td>
+            </tr>
+            <tr>
+              <td><img src="img-cubos/oll/oll-55.jpg" alt="OLL Caso 55 - Beast" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/oll/oll-56.jpg" alt="OLL Caso 56 - Awkward" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>55. F U ( R U2 R' U') ( R U2 R' U') F' - Beast</td>
+              <td>56. ( R' U' R U' R' U2 R) F ( R U R' U') F' - Awkward</td>
+            </tr>
+            <tr>
+              <td><img src="img-cubos/oll/oll-57.jpg" alt="OLL Caso 57 - Wheelchair" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+             </tr>
+            <tr>
+              <td>57. ( R U R' U') ( R U' R') ( F' U' F) ( R U R') - Wheelchair</td>
+            </tr>
+          </table>
+        `;
+    }
+    // --- NUEVA SECCIÓN OLL-OH (solo 2 casos) ---
+    else if (cat === "OLL - OH") {
+        display.innerHTML = `
+          <table border="1">
+            <tr>
+              <td><img src="img-cubos/oll-oh/oll-1.jpg" alt="OLL-oh Caso 1" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/oll-oh/oll-2.jpg" alt="OLL-oh Caso 2" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>1. F R U R' U' F'</td>
+              <td>2. R U2 R2 U' R2 U' R2 U2 R</td>
+            </tr>
+          </table>
+        `;
+    }
+    // --- NUEVA SECCIÓN PLL (21 casos) ---
+    else if (cat === "PLL") {
+        display.innerHTML = `
+          <table border="1">
+            <tr> 
+              <td><img src="img-cubos/pll/pll-1.jpg" alt="pll Caso 1 - Ua" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/pll/pll-extra-1.jpg" alt="pll Caso 1 Extra - Ua" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>1. ( R U' R U) R U ( R U' R' U') R2 - Ua</td>
+              <td>Extra-1. ( R2 U' R' U') R U R U ( R U' R) - Ua</td>
+            </tr>
+            <tr> 
+              <td><img src="img-cubos/pll/pll-2.jpg" alt="pll Caso 2 - Ub" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/pll/pll-extra-2.jpg" alt="pll Caso 2 Extra - Ub" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>2. R2 U ( R U R' U') R' U' ( R' U R') - Ub</td>
+              <td>Extra-2. ( R' U R' U') R' U' ( R' U R U) R2 - Ub</td>
+            </tr>
+            <tr> 
+              <td><img src="img-cubos/pll/pll-3.jpg" alt="pll Caso 3 - H" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/pll/pll-4.jpg" alt="pll Caso 4 - Z" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>3. Feliks (M2' U' M2') U2' (M2' U' M2') - H</td>
+              <td>4. ( M2' U M2' U) ( M' U2) ( M2' U2 M') - Z</td>
+            </tr>
+            <tr> 
+              <td><img src="img-cubos/pll/pll-5.jpg" alt="pll Caso 5 - Z" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/pll/pll-6.jpg" alt="pll Caso 6 - Ab" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>5. x (R2' D2) ( R U R') D2 ( R U' R) x' - Ab</td>
+              <td>6. x ( R' U R') D2 ( R U' R') D2 R2 x' - Aa</td>
+            </tr>
+            <tr> 
+              <td><img src="img-cubos/pll/pll-7.jpg" alt="pll Caso 7 - Ab" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/pll/pll-8.jpg" alt="pll Caso 8 - Aa" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>7. x' ( R U' R' D) ( R U R' D') ( R U R' D) ( R U' R' D') x - E</td>
+              <td>8. R2 U ( R' U R' U') ( R U' R2) D U' ( R' U R D') - Ga</td>
+            </tr>
+            <tr> 
+              <td><img src="img-cubos/pll/pll-9.jpg" alt="pll Caso 9 - Aa" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/pll/pll-10.jpg" alt="pll Caso 10 - E" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>9. ( F' U' F) ( R2 u R' U) ( R U' R u') R2' - Gb</td>
+              <td>10. R2 U' ( R U' R U) ( R' U R2 D') ( U R U' R') D - Gc</td>
+            </tr>
+            <tr> 
+              <td><img src="img-cubos/pll/pll-11.jpg" alt="pll Caso 11 - Ga" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/pll/pll-12.jpg" alt="pll Caso 12 - Ga" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>11. D' ( R U R' U') D ( R2 U' R U') ( R' U R' U) R2 - Gd</td>
+              <td>12. ( R' U L' U2) ( R U' R' U2 R) L U' - Ja</td>
+            </tr>
+            <tr> 
+              <td><img src="img-cubos/pll/pll-13.jpg" alt="pll Caso 13 - Gb" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/pll/pll-14.jpg" alt="pll Caso 14 - Gb" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>13. ( R U R' F') ( R U R' U') R' F R2 U' R' - Jb</td>
+              <td>14. ( R' U2 R U2') R' F ( R U R' U') R' F' R2 - Rb</td>
+            </tr>
+            <tr> 
+              <td><img src="img-cubos/pll/pll-15.jpg" alt="pll Caso 15 - Gc" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/pll/pll-16.jpg" alt="pll Caso 16 - Gc" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>15. ( R U' R' U') ( R U R D) ( R' U' R D') ( R' U2 R') - Ra</td>
+              <td>16. ( R U R' U') ( R' F R2 U') R' U' ( R U R' F') - T</td>
+            </tr>
+            <tr> 
+              <td><img src="img-cubos/pll/pll-17.jpg" alt="pll Caso 17 - Gd" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/pll/pll-18.jpg" alt="pll Caso 18 - Gd" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>17. Feliks ( R' U' F') ( R U R' U') ( R' F R2 U') ( R' U' R U) ( R' U R) - F</td>
+              <td>18. F( R U' R' U') ( R U R' F')( R U R' U')( R' F R F') - Y</td>
+            </tr>
+            <tr> 
+              <td><img src="img-cubos/pll/pll-19.jpg" alt="pll Caso 19 - Gd" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/pll/pll-20.jpg" alt="pll Caso 20 - Gd" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>19. Feliks ( R' U R' U') y ( R' F' R2 U') ( R' U R' F) R F - V</td>
+              <td>20. ( R' U R U') ( R' F' U' F) ( R U R' F) R' F' - Nb</td>
+            </tr>
+            <tr> 
+              <td><img src="img-cubos/pll/pll-21.jpg" alt="pll Caso 21 - Gd" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>21. ( R U R' U) ( R U R' F') ( R U R' U') ( R' F R2 U') R' U2 ( R U' R') - Na</td>
+            </tr>
+            </table>
+        `;
+    }
+    
+    // --- NUEVA SECCIÓN PLL-OH (solo 2 casos) ---
+    else if (cat === "PLL - OH") {
+        display.innerHTML = `
+          <table border="1">
+            <tr>
+              <td><img src="img-cubos/pll-oh/oll-1.jpg" alt="OLL-oh Caso 1" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/pll-oh/oll-2.jpg" alt="OLL-oh Caso 2" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>1. F R U R' U' F'</td>
+              <td>2. R U2 R2 U' R2 U' R2 U2 R</td>
+            </tr>
+          </table>
+        `;
+    }
+    // --- NUEVA SECCIÓN PLL-SKIP (solo 2 casos) ---
+    else if (cat === "PLL-SKIP") {
+        display.innerHTML = `
+          <table border="1">
+            <tr>
+              <td><img src="img-cubos/pll-skip/pll-skip-1.jpg" alt="pll-skip Caso 1" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/pll-skip/pll-skip-2.jpg" alt="pll-skip Caso 2" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>1. F R U R' U' F'</td>
+              <td>2. R U2 R2 U' R2 U' R2 U2 R</td>
+            </tr>
+          </table>
+        `;
+    }
+    // --- NUEVA SECCIÓN AntiSexy (solo 2 casos) ---
+    else if (cat === "AntiSexy") {
+        display.innerHTML = `
+          <table border="1">
+            <tr>
+              <td><img src="img-cubos/AntiSexy/AntiSexy-1.jpg" alt="AntiSexy-oh Caso 1" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/AntiSexy/AntiSexy-2.jpg" alt="AntiSexy-oh Caso 2" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>1. F R U R' U' F'</td>
+              <td>2. R U2 R2 U' R2 U' R2 U2 R</td>
+            </tr>
+          </table>
+        `;
+    }
+    // --- NUEVA SECCIÓN Edge Control (solo 2 casos) ---
+    else if (cat === "Edge Control") {
+        display.innerHTML = `
+          <table border="1">
+            <tr>
+              <td><img src="img-cubos/Edge-Control/Edge-Control-1.jpg" alt="Edge-Control Caso 1" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/Edge-Control/Edge-Control-2.jpg" alt="Edge-Control Caso 2" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>1. F R U R' U' F'</td>
+              <td>2. R U2 R2 U' R2 U' R2 U2 R</td>
+            </tr>
+          </table>
+        `;
+    }
+    // --- NUEVA SECCIÓN MAGIC WONDENFUL (solo 2 casos) ---
+    else if (cat === "MAGIC WONDENFUL") {
+        display.innerHTML = `
+          <table border="1">
+            <tr>
+              <td><img src="img-cubos/MAGIC-WONDENFUL/MAGIC-WONDENFUL-1.jpg" alt="OLL-oh Caso 1" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/MAGIC-WONDENFUL/MAGIC-WONDENFUL-2.jpg" alt="OLL-oh Caso 2" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>1. F R U R' U' F'</td>
+              <td>2. R U2 R2 U' R2 U' R2 U2 R</td>
+            </tr>
+          </table>
+        `;
+    }
+// --- NUEVA SECCIÓN Sledge Hammer (solo 2 casos) ---
+    else if (cat === "Sledge Hammer") {
+        display.innerHTML = `
+          <table border="1">
+            <tr>
+              <td><img src="img-cubos/Sledge-Hammer/Sledge-Hammer-1.jpg" alt="Sledge-Hammer Caso 1" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/Sledge-Hammer/Sledge-Hammer-2.jpg" alt="Sledge-Hammer Caso 2" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>1. F R U R' U' F'</td>
+              <td>2. R U2 R2 U' R2 U' R2 U2 R</td>
+            </tr>
+          </table>
+        `;
+    }
+ // --- NUEVA SECCIÓN VLS (solo 2 casos) ---
+    else if (cat === "VLS") {
+        display.innerHTML = `
+          <table border="1">
+            <tr>
+              <td><img src="img-cubos/VLS/VLS-1.jpg" alt="VLS Caso 1" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/VLS/VLS-2.jpg" alt="Sledge-Hammer Caso 2" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>1. F R U R' U' F'</td>
+              <td>2. R U2 R2 U' R2 U' R2 U2 R</td>
+            </tr>
+          </table>
+        `;
+    }
+ // --- NUEVA SECCIÓN WV (solo 2 casos) ---
+    else if (cat === "WV") {
+        display.innerHTML = `
+          <table border="1">
+            <tr>
+              <td><img src="img-cubos/wv/WV-1.jpg" alt="WV Caso 1" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/wv/WV-2.jpg" alt="WV Caso 2" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>1. L' U2 R U R' U2 L</td>
+              <td>2. R U2 L' U' L U2 R'</td>
+            </tr>
+            <tr>
+              <td><img src="img-cubos/wv/WV-3.jpg" alt="WV Caso 3" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/wv/WV-4.jpg" alt="WV Caso 4" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>3. R U' R'</td>
+              <td>4. L' U L</td>
+            </tr>
+            <tr>
+              <td><img src="img-cubos/wv/WV-5.jpg" alt="WV Caso 5" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/wv/WV-6.jpg" alt="WV Caso 6" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>5. U2 L U' R U L' U R'</td>
+              <td>6. U2 R' U L' U' R U' L</td>
+            </tr>
+            <tr>
+              <td><img src="img-cubos/wv/WV-7.jpg" alt="WV Caso 7" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/wv/WV-8.jpg" alt="WV Caso 8" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>7. R2 D R' U' R D' R2</td>
+              <td>8. L2 D' L U L' D L2</td>
+            </tr>
+            <tr>
+              <td><img src="img-cubos/wv/WV-9.jpg" alt="WV Caso 9" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/wv/WV-10.jpg" alt="WV Caso 10" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>9. R U' R' U2 R U2 R' U' R U' R'</td>
+              <td>10. L2 D' L U L' D L2</td>
+            </tr>
+            <tr>
+              <td><img src="img-cubos/wv/WV-11.jpg" alt="WV Caso 11" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/wv/WV-12.jpg" alt="WV Caso 12" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>11. U' R U' R' U2 R U' R' U2 R U R'</td>
+              <td>12. U L' U L U2 L' U L U2 L' U' L</td>
+            </tr>
+            <tr>
+              <td><img src="img-cubos/wv/WV-13.jpg" alt="WV Caso 13" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/wv/WV-14.jpg" alt="WV Caso 14" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>13. R U R' U' R U' R'</td>
+              <td>14. L' U' L U L' U L</td>
+            </tr>
+            <tr>
+              <td><img src="img-cubos/wv/WV-15.jpg" alt="WV Caso 15" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/wv/WV-16.jpg" alt="WV Caso 16" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>15. U R U' R' U R U2 R'</td>
+              <td>16. U' L' U L U' L' U2 L</td>
+            </tr>
+            <tr>
+              <td><img src="img-cubos/wv/WV-17.jpg" alt="WV Caso 17" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/wv/WV-18.jpg" alt="WV Caso 18" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>17. L' U2 R U L U' L' U R' U2 L</td>
+              <td>18. R U2 L' U' R' U R U' L U2 R'</td>
+            </tr>
+            <tr>
+              <td><img src="img-cubos/wv/WV-19.jpg" alt="WV Caso 19" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/wv/WV-20.jpg" alt="WV Caso 20" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>19. R U R2 U' R2 U' R2 U2 R</td>
+              <td>20. L' U' L2 U L2 U L2 U2 L'</td>
+            </tr>
+            <tr>
+              <td><img src="img-cubos/wv/WV-21.jpg" alt="WV Caso 21" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/wv/WV-22.jpg" alt="WV Caso 22" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>21. U R' U' R2 U' R2 U2 R</td>
+              <td>22. U' L U L2 U L2 U2 L'</td>
+            </tr>
+            <tr>
+              <td><img src="img-cubos/wv/WV-23.jpg" alt="WV Caso 23" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/wv/WV-24.jpg" alt="WV Caso 24" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>23. R U2 L U L' R' U2 L U L'</td>
+              <td>24. L' U2 R' U' R L U2 R' U' R</td>
+            </tr>
+            <tr>
+              <td><img src="img-cubos/wv/WV-25.jpg" alt="WV Caso 25" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/wv/WV-26.jpg" alt="WV Caso 26" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>25. U L' U R U' L U2 R'</td>
+              <td>26. U' R U' L' U R' U2 L</td>
+            </tr>
+            <tr>
+              <td><img src="img-cubos/wv/WV-27.jpg" alt="WV Caso 27" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/wv/WV-28.jpg" alt="WV Caso 28" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>27. U' L' U R U' M' x'</td>
+              <td>28. U R U' L' U M' x'</td>
+            </tr>
+            <tr>
+              <td><img src="img-cubos/wv/WV-29.jpg" alt="WV Caso 29" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/wv/WV-30.jpg" alt="WV Caso 30" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>29. U R U2 R2 U' R U' R' U2 R</td>
+              <td>30. U' L' U2 L2 U L' U L U2 L'</td>
+            </tr>
+            <tr>
+              <td><img src="img-cubos/wv/WV-31.jpg" alt="WV Caso 31" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/wv/WV-32.jpg" alt="WV Caso 32" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>31. U M x U R' U' L R U2 R'</td>
+              <td>32. U' M x U' L U R' L' U2 L</td>
+            </tr>
+            <tr>
+              <td><img src="img-cubos/wv/WV-33.jpg" alt="WV Caso 33" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/wv/WV-34.jpg" alt="WV Caso 34" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>33. U R U2 R'</td>
+              <td>34. U' L' U2 L</td>
+            </tr>
+            <tr>
+              <td><img src="img-cubos/wv/WV-35.jpg" alt="WV Caso 35" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/wv/WV-36.jpg" alt="WV Caso 36" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>35. U L' U R U' R' L U' R U' R'</td>
+              <td>36. U' R U' L' U L R' U L' U L</td>
+            </tr>
+            <tr>
+              <td><img src="img-cubos/wv/WV-37.jpg" alt="WV Caso 37" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/wv/WV-38.jpg" alt="WV Caso 38" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>37. L' U2 R U' R' U2 L U R U' R'</td>
+              <td>38. U' R U' L' U L R' U L' U L</td>
+            </tr>
+            <tr>
+              <td><img src="img-cubos/wv/WV-39.jpg" alt="WV Caso 39" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/wv/WV-40.jpg" alt="WV Caso 40" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>39. L' U2 L R U R' U L' U L</td>
+              <td>40. R U2 R' L' U' L U' R U' R'</td>
+            </tr>
+            <tr>
+              <td><img src="img-cubos/wv/WV-41.jpg" alt="WV Caso 41" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/wv/WV-42.jpg" alt="WV Caso 42" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>41. R U' R2 U2 R U R' U R</td>
+              <td>42. L' U L2 U2 L' U' L U' L'</td>
+            </tr>
+            <tr>
+              <td><img src="img-cubos/wv/WV-43.jpg" alt="WV Caso 43" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/wv/WV-44.jpg" alt="WV Caso 44" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>43. U R' U L U' R2 U L' U R'</td>
+              <td>44. U' L U' R' U L2 U' R U' L</td>
+            </tr>
+            <tr>
+              <td><img src="img-cubos/wv/WV-45.jpg" alt="WV Caso 45" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/wv/WV-46.jpg" alt="WV Caso 46" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>45. U R U' R' U R U' R' U R U2 R'</td>
+              <td>46. U' L' U L U' L' U L U' L' U2 L</td>
+            </tr>
+            <tr>
+              <td><img src="img-cubos/wv/WV-47.jpg" alt="WV Caso 47" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/wv/WV-48.jpg" alt="WV Caso 48" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>47. U R U2 R2 U2 R U R' U R</td>
+              <td>48. U' L' U2 L2 U2 L' U' L U' L'</td>
+            </tr>
+            <tr>
+              <td><img src="img-cubos/wv/WV-49.jpg" alt="WV Caso 49" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/wv/WV-50.jpg" alt="WV Caso 50" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>49. R U' R2 U' R U' R' U2 R</td>
+              <td>50. L' U L2 U L' U L U2 L'</td>
+            </tr>
+            <tr>
+              <td><img src="img-cubos/wv/WV-51.jpg" alt="WV Caso 51" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/wv/WV-52.jpg" alt="WV Caso 52" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>51. R U R' U' R U R' U' R U' R'</td>
+              <td>52. L' U' L U L' U' L U L' U L</td>
+            </tr>
+            <tr>
+              <td><img src="img-cubos/wv/WV-53.jpg" alt="WV Caso 53" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/wv/WV-54.jpg" alt="WV Caso 54" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>53. R2 D R' U R D' R' U2 R'</td>
+              <td>54. L2 D' L U' L' D L U2 L</td>
+            </tr>
+          </table>
+        `;
+    }
+// --- NUEVA SECCIÓN ZBLL - AS (solo 2 casos) ---
+    else if (cat === "ZBLL - AS") {
+        display.innerHTML = `
+          <table border="1">
+            <tr>
+              <td><img src="img-cubos/ZBLL-S/ZBLL-S-1.jpg" alt="ZBLL-S Caso 1" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/ZBLL-S/ZBLL-S-2.jpg" alt="ZBLL-S Caso 2" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>1. F R U R' U' F'</td>
+              <td>2. R U2 R2 U' R2 U' R2 U2 R</td>
+            </tr>
+            
+            
+          </table>
+        `;
+    }
+// --- NUEVA SECCIÓN ZBLL - S (solo 2 casos) ---
+    else if (cat === "ZBLL - S") {
+        display.innerHTML = `
+          <table border="1">
+            <tr>
+              <td><img src="img-cubos/ZBLL-S/ZBLL-S-1.jpg" alt="ZBLL-S Caso 1" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/ZBLL-S/ZBLL-S-2.jpg" alt="ZBLL-S Caso 2" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>1. F R U R' U' F'</td>
+              <td>2. R U2 R2 U' R2 U' R2 U2 R</td>
+            </tr>
+          </table>
+        `;
+    }
+// --- NUEVA SECCIÓN ZBLL - L (solo 2 casos) ---
+    else if (cat === "ZBLL - L") {
+        display.innerHTML = `
+          <table border="1">
+            <tr>
+              <td><img src="img-cubos/ZBLL-L/ZBLL-L-1.jpg" alt="ZBLL-L Caso 1" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/ZBLL-L/ZBLL-L-2.jpg" alt="ZBLL-L Caso 2" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>1. F R U R' U' F'</td>
+              <td>2. R U2 R2 U' R2 U' R2 U2 R</td>
+            </tr>
+          </table>
+        `;
+    }
+// --- NUEVA SECCIÓN ZBLL - U (solo 2 casos) ---
+    else if (cat === "ZBLL - U") {
+        display.innerHTML = `
+          <table border="1">
+            <tr>
+              <td><img src="img-cubos/ZBLL-U/ZBLL-U-1.jpg" alt="ZBLL-U Caso 1" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/ZBLL-U/ZBLL-U-2.jpg" alt="ZBLL-U Caso 2" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>1. (R U2 R' U' R U' R') (L' U2 L U L' U L)</td>
+              <td>2. ( R U R' U') ( R U' R' U2) ( R U' R' U2) R U R'</td>
+            </tr>
+            <tr>
+              <td><img src="img-cubos/ZBLL-U/ZBLL-U-3.jpg" alt="ZBLL-U Caso 3" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/ZBLL-U/ZBLL-U-4.jpg" alt="ZBLL-U Caso 4" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>3. ( R' U' R U) ( R' U R U2) ( R' U R U2) R' U' R </td>
+              <td>4. R' ( F R U' R' U' R U R' F' R U R' U' R' F R F') R </td>
+            </tr>
+            <tr>
+              <td><img src="img-cubos/ZBLL-U/ZBLL-U-5.jpg" alt="ZBLL-U Caso 5" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/ZBLL-U/ZBLL-U-6.jpg" alt="ZBLL-U Caso 6" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>            <tr>
+              <td>5. F2 ( R U' R' U' R U R' F' R U R' U' R' F R) F2</td>
+              <td>6.  R U' R' U R U' L U L' U x' U2 R U2 R2</td>
+            </tr>
+          </table>
+        `;
+    }
+// --- NUEVA SECCIÓN ZBLL - T (solo 2 casos) ---
+    else if (cat === "ZBLL - T") {
+        display.innerHTML = `
+          <table border="1">
+            <tr>
+              <td><img src="img-cubos/ZBLL-T/ZBLL-T-1.jpg" alt="ZBLL-T Caso 1" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/ZBLL-T/ZBLL-T-2.jpg" alt="ZBLL-T Caso 2" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>1. R U R' U R U2 R' L' U' L U' L' U2 L</td>
+              <td>2. U' R U' R' U2 R U R' U2 R U R' U R U' R'</td>
+            </tr>
+            <tr>
+              <td><img src="img-cubos/ZBLL-T/ZBLL-T-3.jpg" alt="ZBLL-T Caso 3" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/ZBLL-T/ZBLL-T-4.jpg" alt="ZBLL-T Caso 4" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>3. U R' U R U2 R' U' R U2 R' U' R U' R' U R</td>
+              <td>4. U' R' F R U R' U' R' F' R2  U' R' U2 R</td>
+            </tr>
+            <tr>
+              <td><img src="img-cubos/ZBLL-T/ZBLL-T-5.jpg" alt="ZBLL-T Caso 5" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/ZBLL-T/ZBLL-T-6.jpg" alt="ZBLL-T Caso 6" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>5. U R' U R U2 L' R' U R U' L</td>
+              <td>6. U R U R' U' R' U L' U2 R U' R' U2 L R2 U' R'</td>
+            </tr>
+          </table>
+        `;
+    }
+// --- NUEVA SECCIÓN ZBLL - Pi (solo 2 casos) ---
+    else if (cat === "ZBLL - Pi") {
+        display.innerHTML = `
+          <table border="1">
+            <tr>
+              <td><img src="img-cubos/ZBLL-Pi/ZBLL-Pi-1.jpg" alt="ZBLL-Pi Caso 1" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/ZBLL-Pi/ZBLL-Pi-2.jpg" alt="ZBLL-Pi Caso 2" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>1. F R U R' U' F'</td>
+              <td>2. R U2 R2 U' R2 U' R2 U2 R</td>
+            </tr>
+          </table>
+        `;
+    }
+ // --- NUEVA SECCIÓN ZBLL - H (solo 2 casos) ---
+    else if (cat === "ZBLL - H") {
+        display.innerHTML = `
+          <table border="1">
+            <tr>
+              <td><img src="img-cubos/ZBLL-H/ZBLL-H-1.jpg" alt="ZBLL-H Caso 1" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+              <td><img src="img-cubos/ZBLL-Pi/ZBLL-H-2.jpg" alt="ZBLL-H Caso 2" style="width:100px; border-radius:6px; border:1px solid rgba(255,255,255,0.1);" /></td>
+            </tr>
+            <tr>
+              <td>1. F R U R' U' F'</td>
+              <td>2. R U2 R2 U' R2 U' R2 U2 R</td>
+            </tr>
+          </table>
+        `;
+    }
+    else if (algorithmData[cat]) {
+        display.innerHTML = algorithmData[cat].map(a => `<div>${a}</div>`).join("");
+    } else {
+        display.innerHTML = "";
+    }
+};
+</script>
+</body>
+</html>

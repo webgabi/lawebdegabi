@@ -1,0 +1,77 @@
+	body{
+		background-color: # FFF;/*Fondo de pantalla blanco*/
+	}
+
+
+	header{
+		/*border-style:solid;*//*Te hace un cuadro alrededor del texto*/
+		border-radius: 10px; /*Te pone el cuadro redondeado 10px*/
+		border-width: 1px; /*Te hacer el grosor del cuadro con 1 px*/
+		border-color: black; /*Te pone el borde del cuadro en rojo*/
+		/*margin: 20px;*//*Te separa 20 px del principio de la pantalla*/
+		/*margin-top: 50px;*/ /*Te separa 50 px del principio de la pantalla pero si tienes texto en otro lugar por ejemplo en "section" pues solo se separa de arriba pero el texto de abajo subira porque no le influye*/
+		padding: 20px; 	/*Separa el texto del encabezado*/	
+		/*border-style:dotted;*//*Te hace un cuadro alrededor pero con puntos.*/
+		/*border-style:dashed;*/ /*Te hace un cuadro alrededor pero con lineas*/
+		/*border-style:double;*//*Te hace un cuadro alrededor doble*/
+		/*border-style:groove;*//*Te hace un cuadro alredor*/
+		/*border-style:hidden;*//*Te quita cualquier cuadro*/
+		/*border-style:inset;*/ /*Te hace una cuadro como si estuvieras dentro*/
+		/*border-style:none;*/ /*Te quita cualquier cuadro que tengamos*/
+		/*border-style:outset;*/ /*Te crea un cuadro como si estuvieras afuera*/
+		/*border-style:ridge;*/ /*Te hace un cuadro*/
+		
+		color: #474747;
+		font-size: 20px;/*Te pone un tamaño de pixeles*/
+		text-align:justify;/*Te justifica el texto*/
+		/*text.aling: center;*//*Te centra el texto*/
+	} 
+		
+	
+	.calendario{
+	/*border-top: 2px solid #000;*//*Te crea una linea arriba*/
+	/*border-left: 2px solid #000;*//*Te crea una linea a la izquierda*/
+	/*border-right: 2px solid #000;*//*Te crea una linea a la derecha*/
+	/*border-bottom: 2px solid #000;*//*Te crea una linea abajo*/
+	
+	
+	
+	column-count: 2;/*Te pone el texto de 2 columnas*/
+	-webkit-column-count: 2;
+	
+	}
+	
+	
+	.carrerarealizada{
+		/*background-image: url(../../images/carrerapasada.png)*/
+		background-image:url(../images/carrerapasada.jpg);
+		background-repeat: no-repeat;
+		background-color: #CCC;
+		background-position:center;
+		
+				
+		}
+	
+	
+	*{
+		margin: 5px;
+		padding: 0px;
+		}
+	
+	table {
+		width:100%;
+		height: auto;
+		border: 1 px solid black;
+		background-color: black;
+		}
+		
+		
+		
+	table td{
+		width: auto;
+		height:auto;
+		border: 1 px solid black;
+		color: black;
+		background-color: white;
+		padding: 5px;
+		}

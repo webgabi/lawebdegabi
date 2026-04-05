@@ -1,0 +1,136 @@
+ul.tabs {
+	
+	margin: 5px;
+	padding-top: 0px;
+	width: 100%;
+	background: #fff;
+	list-style: none;
+	display: inline-flex;
+	flex-wrap: wrap;
+	width: 890px;
+	margin-left: 0px;
+}
+
+ul.tabs a {
+	
+	border: 1px solid #000;
+}
+
+
+
+ul.tabs a:hover{
+
+	background-color:#4682B4;
+}
+
+
+ul.tabs li {
+width: 25%;
+/*	display: none;*/
+}
+
+
+ul.tabs li a {
+color: rgb(53, 166, 25);
+text-decoration: none;
+font: 14px Helvetica, Sans-Serif;
+text-align: center;
+display: block;
+padding: 3px 0px;
+/*font: bold 13px Helvetica, Sans-Serif; te poner la fuente en negrita*/
+}
+
+
+
+
+
+@media screen and (max-width: 1280px) {
+	/*Pantalla Asus*/
+	
+
+	.Titulo-categorias{
+		text-align: center;
+		background: #004a60;
+		font-size: 20px;
+		margin: 0px;
+		margin-bottom: 5px;
+		margin-top: 10px;	
+		color: white;
+		width: 400px;
+		margin-left:0px;
+	
+	}
+
+
+	ul.tabs {
+	
+		margin-left: 0px;
+		width: 100%;
+	}
+
+	ul.tabs li a {
+		padding: 2px 0px;
+		
+	}
+
+
+	
+
+}
+
+
+
+
+
+@media (min-width: 375px) and (max-width: 667px){
+    /*400px 720px*/ /*pantalla movil 459*705*/
+       ul.tabs {
+    
+        margin-left: 10px;
+        width: 390px;
+    }
+    
+
+    ul.tabs li a {
+        padding: 0px 0px;
+        
+    }
+
+}
+
+
+
+
+@media (min-width: 100px) and (max-width: 374px){
+    /*Redmi 9 340px 604px*/
+
+	ul.tabs {
+		
+		margin-left: 10px;
+		width: 340px;
+	}
+	
+
+	ul.tabs li a {
+		padding: 0px 0px;
+		
+	}
+
+
+	ul.tabs li {
+		width: 65px;
+	/*		margin: auto;*/
+	
+			}
+
+
+	
+} 
+
+
+
+
+/*@media (min-width: 668px) and (max-width: 1279px){
+/*pantalla movil horizontal 779 X 284*/
+
+

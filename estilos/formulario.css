@@ -1,0 +1,64 @@
+body{
+	background-image:url(../images/invierno-parque.jpg);
+	background-size: 100vw 100vh;/*100vw* 100*100 el ancho de la pantalla y 100vh 100*100 de alto de la venta*/
+	background-attachment:fixed;/*Para que la imagen se quede fija*/
+	margin: 0;/*Para quitarle los margenes de los lados*/
+	font-family: monospace;/*Un tipo de fuente a todo las etiquetas*/}
+form{
+	width: 450px;/*Ancho 450px*/
+	margin:auto;/*Para que quede centrado horizontalmente*/
+	background: rgba(0,0,0,0.4);/*Para el color y se queda transparente*/
+	padding: 10px 20px;/*Al hacer esto te hace el formulario a 450px y añade ademas 10 y 20 px alredeor de el*/
+	box-sizing: border-box;/*Pero al añadir este comando te lo pone para adentro y en total seran los 450px*/
+	margin-top: 20px;/*Para bajarlo de arriba */
+	border-radius: 20px;/*Queda redondeado el formulario*/
+	
+}	
+	
+h2 {
+		color: #fff;/*Color blanco*/
+		text-align:center;/*Para que quede centrado el texto*/ 
+		margin: 0;/*Para quitarle los margenes*/
+		font-size: 30px;/*Tamañano de la fuente*/
+		margin-bottom: 20px;	/*Separacion del texto hacia abajo*/	
+}
+		
+input, textarea {
+	width: 100%;/*Ancho total*/
+	margin-bottom: 20px;/*La separacion*/
+	padding: 7px;/*Al poner solo esto se saldria pero pondremos box_sizing: border-box; para que esto no ocurra*/
+	box-sizing:border-box;
+	font-size: 17px;/*Tamaño de la fuente 17px*/
+	border: none;/*Para quitarle todos los bordes y quede más planito*/
+}		
+textarea {
+	min-height: 100px;
+	max-height: 200px;	/*Para poner el alto min y max*/
+	max-width: 100%;/*Para que no pase del 100%*/}
+
+#boton{
+	background: #31384A; 
+	color: #fff;
+	padding:; 20px;
+}	
+
+#boton:hover {
+	cursor:pointer;
+}
+
+/*Para que se adapte a todas las pantallas hay que hacer lo siguiente*/
+
+@media (max-width:480px){
+	form{
+		width: 100%;}
+}
+
+
+h1 {
+	text-align:center;
+	color: #fff;
+	font-size: 40px;
+	background: rgba(0,0,0,0.4);
+	margin-top: 20px;
+	
+}

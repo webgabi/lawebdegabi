@@ -1,0 +1,3 @@
+$(function(){
+  $('#mi-tabla').tablesorter(); 
+});
